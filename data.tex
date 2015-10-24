@@ -1,0 +1,52 @@
+
+\section{NCAA Basketball Dataset}
+We are not only interested in detecting events in long untrimmed videos, but
+also automatically identifying the people responsible for the events.
+
+Unfortunately, recent activity detection datasets like THUMOS \cite{THUMOS},
+ActivityNet \cite{ActivityNet}, and others such as
+\cite{UCF101,Finegrained_cooking} mostly contain videos with a single actor
+where every action is performed in a different setting. These are actions from
+multiple sports events and/or household chores.  Identying the person
+responsible for the action is not an interesing task in these datasets, and is
+not critical for recognizing the action itself.
+
+We focus on a multi-person setting where the events can be primarily
+differentiated by the action of a small subset of people present in the scene.
+Here, attending to the releavant people becomes more crucial and is a valuable
+output in itself. A natural choice for such events is a multi-player sport.
+With this in mind, we have collected a new large-scale dataset of basketball
+events. This dataset will be made publicly available upon publication.
+
+\subsection{Data Collection}
+We needed a large collection of publicly available videos to construct the dataset.
+Incidentally, complete basketball videos are
+publicly available for $296$ NCAA games on
+YouTube\footnote{https://www.youtube.com/user/ncaaondemand}.  These games are
+played in different venues over different periods of time with a good amount of
+diversity in setting and gameplay across the videos. More interestingly, they
+are also accompanied by sparse play-by-play text snippets describing the events
+at a few key-moments in each game.
+
+We only consider the most recent $257$ games and ignore the older games with
+slightly different rules than modern basketball.  As a first step, we clustered the
+play-by-play text to identify the most frequent events from all games. We
+narrowed the event list to $11$ classes. These included 5 types of shots and
+steal, with each shot being further classified as a successful or failed
+attempt (Fig.~\ref{fig:data_dist}). We then setup an AMT task, where the
+annotators were asked to annotate the ``end-point" of these events if and when
+they occur in the videos. Most basketball shots are of fixed duration. Hence,
+we treat a 4 second window around the annotated ``end-point" as the total span
+of the event.  Refer to supp. material for more details of the AMT task.
+
+The videos were randomly split into $212$ training, $12$ validation and $33$
+test videos. This accounted for a total of $11436$ training, $856$ validation
+and $2256$ test event annotatoins. Note that the total number of training and
+validation event annotations are comparable to the ongoing THUMOS'15 detection
+challenge ($XXXX$ trimmed training instances for $20$ classes and $6553$
+untrimmed validation instances). The distribution of annotations across all the
+different events is visualized in Fig.~\ref{fig:data_dist}, with sample videos
+for a few event classes. The annotations cover all occurrences of the
+events in each video. The videos are typically $1.5$ hours long.  To the best of our
+knowledge, this is the first dataset with dense temporal annotations for
+such long video sequences.
