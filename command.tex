@@ -1,0 +1,80 @@
+\newcommand{\myfrac}[2]{\textstyle\frac{#1}{#2}\displaystyle}
+
+\long\def\symbolfootnote[#1]#2{\begingroup%
+\def\thefootnote{\fnsymbol{footnote}}\footnote[#1]{#2}\endgroup} 
+
+\newcommand{\TODO}{\textcolor{red}{TO DO:~}}
+
+\newcommand{\demi}{\myfrac{1}{2}}
+
+
+\newcommand{\mysec}[1]{Section~\ref{sec:#1}}
+\newcommand{\eq}[1]{Eq.~(\ref{eq:#1})}
+\newcommand{\myfig}[1]{Figure~\ref{fig:#1}}
+\newcommand{\myeq}[1]{Eq.~(\ref{eq:#1})}
+
+\newcommand{\tr}{\text{tr}}
+\newcommand{\vect}[1]{\text{vect}\left(#1\right)}
+
+\newcommand{\diag}{\text{diag}}
+\newcommand{\Diag}{\text{Diag}}
+
+\newcommand{\xx}{\times}
+
+\newcommand{\BEQAS}{\begin{eqnarray*}}
+\newcommand{\EEQAS}{\end{eqnarray*}}
+
+\newcommand{\BIEQAS}{\begin{IEEEeqnarray*}}
+\newcommand{\EIEQAS}{\end{IEEEeqnarray*}}
+
+\newcommand{\BEQA}{\begin{eqnarray}}
+\newcommand{\EEQA}{\end{eqnarray}}
+
+\newcommand{\BIEQA}{\begin{IEEEeqnarray}}
+\newcommand{\EIEQA}{\end{IEEEeqnarray}}
+
+\newcommand{\idm}{I}
+
+\newcommand{\Simp}{\mathcal {S}}
+\def\R{{\rm I}\!{\rm  R}}
+\newcommand{\C}{\mathcal {C}}
+\newcommand{\LL}{\ell}
+\newcommand{\EE}{\mathbb {E}}
+\newcommand{\Ecal}{\mathcal {E}}
+\newcommand{\I}{\mathbbm {1} }
+
+\newcommand{\mcal}[1]{\mathcal{#1}}
+\newcommand{\bb}[1]{\mathbb{#1}}
+
+\newcommand{\Fa}{J_{\alpha}}
+\newcommand{\Fwb}{J_{w b}}
+\newcommand{\Fapp}{J_{\text{app}}}
+
+
+\newcommand{\suce}{\preccurlyeq}
+\newcommand{\estSuce}{\succcurlyeq}
+
+\newcommand{\logPartNS}{A_0(W,b)}
+\newcommand{\logPart}[1]{A_{#1}(W,b)}
+\newcommand{\psiPara}{\tau}
+
+\newcommand{\sumL}{\sum_{l=1}^K}
+\newcommand{\sumK}{\sum_{k=1}^K}
+\newcommand{\sumN}{\sum_{n=1}^N}
+\newcommand{\sumM}{\sum_{m=1}^M}
+\newcommand{\sumR}{\sum_{r=1}^R}
+\newcommand{\sumP}{\sum_{p=1}^P}
+\newcommand{\sumKL}{\sum_{k,k'=1}^K}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+
+\newcommand{\BITE}{\begin{equation}\left\{ \begin{array}{lll}}
+\newcommand{\EITE}{\end{array}\right.\end{equation}}
+
+\newcommand{\BITES}{\begin{equation*}\left\{ \begin{array}{lll}}
+\newcommand{\EITES}{\end{array}\right.\end{equation*}}
+
+
+
+
