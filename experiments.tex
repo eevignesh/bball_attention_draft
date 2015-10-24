@@ -61,6 +61,7 @@ Mean             & 0.343 &  & 0.221 & 0.469 &  & 0.452 & 0.489 & 0.505 & 0.516 \
   \caption{Mean average precision for event {\em classification} given
     isolated clips.}
   \label{tab:event_class}
+  \label{tab:class_res}
 \end{table*}
 
 \begin{itemize}
@@ -219,6 +220,17 @@ event. For instance, in free-throws Fig.~\ref{fig:track_spec_att} we see that
 the model always attends to the defender at a specific position, who is visible
 throughout the entire event unlike the shooter.
 
+Since the identity of an event often depends on the position of the
+shooter with respect to the court, we decided to evaluate the
+normalized locations of the attended players.
+Specifically, we annotated 5 points on the courts and
+aligned all the attended boxes for an event to one cannonical image. 
+Fig.~\ref{fig:att_heatmap} shows a heatmap  showing the spatial distributions
+of the attended players with respect to the court. It is interesting to note that
+our model consistenly focuses under the basket for a layup, at the free-throw
+line for free-throws and outside the 3-point ring for 3-pointers.
+
+\eat{
 Since basketball shots are often classified based on the position of the
 shooter with respect to the court, we analyze this in
 Fig.~\ref{fig:att_heatmap}.  We annotated specific points on the courts and
@@ -227,6 +239,7 @@ plotted the resulting heatmap showing the distribution in position of the
 attended player with respect to the court. It is interesting to note that
 our model consistenly focuses under the basket for a layup, at the free-throw
 line for free-throws and outside the 3-point ring for 3-pointers.
+}
 
 
 % -------- Heat Map for youtube videos
