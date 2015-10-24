@@ -1,25 +1,8 @@
 \section{Our Method}
-% -------- Heat Map for youtube videos
-\begin{figure*}[t!]
-\begin{center}
-
-   \subfigure[Attention without tracks]{
-                \includegraphics[width=3 in]{images/system_figure_2_cropped.pdf}
-                \label{fig:heatmap_ft}
-    }
-   \subfigure[Attention with tracks]{
-                \includegraphics[width=3 in]{images/system_figure_1_cropped.pdf}
-                \label{fig:heatmap_lp}
-    }
-\end{center}
-   \caption{Our attention models (a) without tracks and (b) with tracks are
-   shown here. The variables in the model are explained in the methods
- section.}
-\label{fig:att_heatmap}
-\end{figure*}
-% ---------------------------------------------------------------------------------
 
 
+
+\eat{
 All events in a basketball game are performed in the same scene by the same set
 of players. The only basis for differentiating these events is the action
 pefromed by a small subset of players at a given time.  For instance, a
@@ -31,8 +14,23 @@ This motivates us to build a model which can reason about an event by focusing
 on specific players during the different phases of the game.  Such a foucsing
 mechanism would also provide valuable information about the game-state, making
 the model more interpretable.
+}
+
+In this section, we describe our unified model for classifying events
+and identifying the key players.
+
 
 \subsection{Player detection and feature extraction}
+
+
+We used AMT to annotate the location of all the players in a subset
+(HOW BIG?) of
+the training data. We then trained a Multibox detector to detect
+players, and ran this on all the training and test videos.
+We kept all detections above a confidence of 0.5 per frame; this
+resulted in between 0 and 10 (?) bounding boxes per frame.
+
+\eat{
 Given a set of basketball video clips, we first preprocess the clips to extract
 player bounding boxes and features. We train a Multibox model \cite{} to detect
 basketball players with bounding-box annotations collected on a subset of
@@ -50,40 +48,118 @@ boxes at time $t$.
 \mathcal{P}_t & = & \{ p_{t1}, \dots, p_{t{P_t}} \}\;,\;\;p_{ti} \in \mathbb{R}^{D_p} \nonumber
 \end{eqnarray}whre $P_t$ is the number of boxes at time $t$ and $T$ is the number of frames
 in the video.
+}
 
-The frame feature $f_t$ is the activation of the last fully connected layer of
-GoogLeNet \cite{} trained on ImageNet \cite{}.  The player feature $p_t^j$
-contains both appearance and spatial components. The appearance features were
+Each frame  is represented by a feature vector $f_t$, which is the activation of the last fully connected layer of
+GoogLeNet \cite{} trained on ImageNet \cite{}.  
+In addition, we compute spatially localized features.
+In particular, $p_{ti}$ 
+contains both appearance and spatial information for the $i$'th
+bounding box in frame $t$. The appearance features were
 extracted by feeding the cropped and resized player region from the frame
 through GoogLeNet and spatially pooling the response from a lower layer. The
 spatial feature corresponds to a spatial histogram indicating the bounding box
-location.  We explain this feature representation in more detail in the
-supplementary material.
+location.  
 
-\subsection{LSTM event classifier}
-Given a video $v$, we pass the frame-level features $f_t$ at time $t$ through a
-Bidirectional Long Short-Term Memory (BLSTM) network. This helps in combining
-contextual information from adjacent frames to provide a better frame
-representation.  Let the hidden state of this BLSTM at time $t$ be denoted by
-$h^f_t$.  This is the concatenated hidden state from both the forward and the
-reverse LSTMS of the BLSTM. Refer to supp.  material for more details.
 
-In order to attend to specific players in each frame, we pass the player features
-through our attention model to generate an attention weighted player feature
-$a_t$. The attention model is the main contribution of our work
-and is explained in detail in the next section.
 
-We feed the concatenated vector $[h^f_t, a_t]$ to a final event classification
-LSTM, similar to the LRCN \cite{} model for video classification. Let
-the hidden state of this LSTM at time $t$ be represented by $h^e_t$.  We then
-train the model by minimizing the following one-vs-all hinge loss:
+\subsection{Event classification}
 
+Given $f_t$ and $p_{ti}$ for each frame in the clip, for $t=1:T$, our goal is to
+train the model to classify the clip into one of 11 categories. As a
+side effect of the way we construct our model, we will also be able to
+identify the key players.
+
+First we compute a global context feature for each frame, $h_t^f$, derived 
+from a bidirectional LSTM applied to the
+frame-level features:
+\[
+h_t^f = \mbox{BLSTM}(h_{t-1}^f, h_{t+1}^f, f_t)
+\]
+Next we use use a unidirectional LSTM to represent the state of the
+game at time $t$:
+\[
+h_t^e = \mbox{LSTM}(h_{t-1}^e, h_t^f, a_t)
+\]
+where $a_t$ is a feature vector derived from the players, as we
+describe below.
+From this, we can predict the class label for the clip using $w_k^T
+h_t^e$. We measure the loss as follows:
 \begin{equation}
-  L = \sum_{k = 1}^K \max (0, 1 - y_k w_k \cdot h^e_t)^2,
-\end{equation} where $y_k$ is $1$ if the video belongs to class $k$,
+  L = \sum_{t=1}^T \sum_{k = 1}^K \max (0, 1 - y_k w_k^T h^e_t)
+\end{equation} 
+where $y_k$ is $1$ if the video belongs to class $k$,
 else it is $-1$, and the weight vector corresponding to
 class $k$ is denoted by $w_k$.
 
+\subsection{Attention model without tracking}
+
+To compute $a_t$, we take a convex combination of the player features:
+\begin{eqnarray} 
+\label{eq:notrack}
+  a_t^{notrack} & = & \sum_{i=1}^{N_t} \alpha_{ti}^{notrack} p_{ti} 
+\\ \nonumber
+  \alpha_{ti}^{notrack} & = & \text{softmax} \left(\phi\left(h^f_t, p_{ti}, h^e_{t-1}\right)\right),
+\end{eqnarray}
+where $N_t$ is the number of detections in frame $t$, 
+and $\phi()$ is a 
+multi layer perceptron $\phi$, similar to
+\cite{Bahdnau_arxiv14},
+This model is illustrated in Figure~\ref{fig:model}(a).
+
+
+
+
+\begin{figure*}[t!]
+\begin{center}
+
+   \subfigure[Attention without tracks]{
+                \includegraphics[width=3 in]{images/system_figure_2_cropped.pdf}
+                \label{fig:heatmap_ft}
+    }
+   \subfigure[Attention with tracks]{
+                \includegraphics[width=3 in]{images/system_figure_1_cropped.pdf}
+                \label{fig:heatmap_lp}
+    }
+\end{center}
+   \caption{Our attention models (a) without tracks and (b) with tracks are
+   shown here. The variables in the model are explained in the methods
+ section.
+BLSTM stands for ``bidirection long short term memory''.
+}
+\label{fig:model}
+\end{figure*}
+
+
+\subsection{Attention model with tracking}
+
+One potential weakness of the previous model is that the
+player being attended to can change from frame to frame.
+An alternative approach is to first perform tracking of the
+players. For this, we use a standard KLT tracker combined with
+bipartite graph matching to perform the data association.
+We then compute the attention scores as shown below:
+
+\begin{eqnarray} 
+\label{eq:track}
+  a_t^{track} & = & \sum_{i=1}^{N_t} \alpha_{ti}^{track} p_{ti} 
+\\ \nonumber
+  \alpha_{ti}^{track} & = & \text{softmax} \left(\phi\left(h^f_t, h^p_{ti}, h^e_{t-1}\right)\right),
+\end{eqnarray}
+where $h_{ti}^p$ is the latent represnetation of player $i$ in frame
+$t$ computed using a BLSTM across tracks:
+\[
+h_{ti}^p = \mbox{BLSTM}(h_{t-1,i}^p, h_{t+1,i}^p, p_{ti}
+\]
+This model is illustrated in Figure~\ref{fig:model}(b).
+Below  we show that although this method gives slightly better
+performance at event classification, it gives worse results for player
+identification, because it is sensitive to tracking errors, and
+because it cannot switch between players within an event.
+
+
+
+\eat{
 \subsection{Attention models}
 
 Unlike past attention models \cite{}, we need to attend to a different set of
@@ -114,10 +190,12 @@ tracking errors.
 At each time-step $t$, this model selects from the set of player features
 $\mathcal{P}_t$. The attention is decided by a softmax weighting:
 
-\begin{eqnarray} \label{eq:notrack}
+\begin{eqnarray} 
+\label{eq:notrack}
   a_t & = & \sum_{i=1}^{P_t} \alpha_{ti} p_{ti} \\ \nonumber
   \alpha^{ti} & = & \text{softmax} \left(\phi\left(h^f_t, p_{ti}, h^e_{t-1}\right)\right),
-\end{eqnarray}where the attention value $\alpha_{ti}$ for the $i^{th}$ player
+\end{eqnarray}
+where the attention value $\alpha_{ti}$ for the $i^{th}$ player
 detection at $t$ is decided by a softmax over the player scores $e_{ti}$. This
 score is obtained from a multi layer perceptron $\phi$, similar to
 \cite{Bahdnau_arxiv14}. Refer to the supp. material for details.
@@ -145,3 +223,29 @@ Eq.~\ref{eq:notrack}, the attention-weighted $a_t$ feature is given by:
 While this provides a more consistent representation for the players across frames,
 this model could suffer from wrong associations due to trakcing. This in turn makes
 the interpretation of attention scores more difficult.
+
+
+\subsection{LSTM event classifier}
+Given a video $v$, we pass the frame-level features $f_t$ at time $t$ through a
+Bidirectional Long Short-Term Memory (BLSTM) network. This helps in combining
+contextual information from adjacent frames to provide a better frame
+representation.  Let the hidden state of this BLSTM at time $t$ be denoted by
+$h^f_t$.  This is the concatenated hidden state from both the forward and the
+reverse LSTMS of the BLSTM. Refer to supp.  material for more details.
+
+In order to attend to specific players in each frame, we pass the player features
+through our attention model to generate an attention weighted player feature
+$a_t$. The attention model is the main contribution of our work
+and is explained in detail in the next section.
+
+We feed the concatenated vector $[h^f_t, a_t]$ to a final event classification
+LSTM, similar to the LRCN \cite{} model for video classification. Let
+the hidden state of this LSTM at time $t$ be represented by $h^e_t$.  We then
+train the model by minimizing the following one-vs-all hinge loss:
+
+\begin{equation}
+  L = \sum_{k = 1}^K \max (0, 1 - y_k w_k \cdot h^e_t)^2,
+\end{equation} where $y_k$ is $1$ if the video belongs to class $k$,
+else it is $-1$, and the weight vector corresponding to
+class $k$ is denoted by $w_k$.
+}
