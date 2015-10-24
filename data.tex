@@ -46,8 +46,12 @@ The videos were randomly split into $212$ training, $12$ validation and $33$
 test videos. 
 We split each of these videos into 4 second clips (using the
 annotation boundaries), and subsampled these to 6fps.
+We filter out clips which are not profile shots (such as those shown in
+Figure~\ref{fig:model}) using a separately trained classifier; this excludes close up shots of players, animations, as
+well as crowd shots.
 This resulted in a total of $11436$ training, $856$ validation
 and $2256$ test clips, each of which has one of 11 labels.
+
 Note that this is comparable in size to the THUMOS'15 detection
 challenge ($XXXX$ trimmed training instances for $20$ classes and $6553$
 untrimmed validation instances). The distribution of annotations across all the
