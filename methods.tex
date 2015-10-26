@@ -86,7 +86,7 @@ describe below.
 From this, we can predict the class label for the clip using $w_k^T
 h_t^e$. We measure the loss as follows:
 \begin{equation}
-  L = \sum_{t=1}^T \sum_{k = 1}^K \max (0, 1 - y_k w_k^T h^e_t)
+  L =   \frac{1}{2} \sum_{t=1}^T \sum_{k = 1}^K \max (0, 1 - y_k w_k^T h^e_t)^2
 \end{equation} 
 where $y_k$ is $1$ if the video belongs to class $k$,
 else it is $-1$, and the weight vector corresponding to
@@ -203,7 +203,8 @@ score is obtained from a multi layer perceptron $\phi$, similar to
 \noindent \textbf{Player attention with tracking}
 In this model, we first associate the detections across all the frames to
 obtain tracks corresponding to each player in the video.  We use a
-standard multi-object tracker with bipartite matching to obtain the tracks
+standard multi-object tracker with bipartite matching similar to
+\cite{Veenman_PAMI2001} to obtain the tracks
 Fig.\ref{fig:track_specific_model}.
 
 The player-track is a temporal sequence representing the change in position and

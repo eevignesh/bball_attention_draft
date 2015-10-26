@@ -19,6 +19,8 @@ analyis of the attention scores.
  We used a hidden state dimension of $256$ for all the LSTM and
 BLSTM RNNs, an embedding layer with ReLU non-linearity and $256$ dimension for
 embedding the player features and frame features before feeding to the RNNs.
+We used $32 \times 32$ bins with spatial pyramid pooling for the player appearance
+feature.
 All the event videos clips were four seconds long and subsampled to 6fps.  The
 $\beta$ value was set to $0.5$ for the attention softmax weighting. We used a
 batch size of $128$, learning rate of $0.005$ which was reduced by a factor of
@@ -44,18 +46,18 @@ below:
   \hline
 Event & IDT\cite{Wang_CVPR11} & IDT\cite{Wang_CVPR11} player & C3D \cite{Tran_arxiv14} & LRCN \cite{Donahue_arxiv14} & MIL\cite{} & Only player & Avg. player & Our no track & Our with track \\ \hline \hline
 
-3-point succ.    & 0.501 &  & 0.282 & 0.462 &  & 0.469 & 0.545 & 0.583 & 0.600 \\
-3-point fail.    & 0.370 &  & 0.117 & 0.564 &  & 0.614 & 0.702 & 0.668 & 0.738 \\
-fr-throw succ. & 0.365 &  & 0.319 & 0.876 &  & 0.885 & 0.809 & 0.892 & 0.882 \\
-fr-throw fail. & 0.778 &  & 0.642 & 0.584 &  & 0.700 & 0.641 & 0.671 & 0.516 \\
-layup succ.      & 0.278 &  & 0.185 & 0.463 &  & 0.416 & 0.472 & 0.489 & 0.500 \\
-layup fail.      & 0.283 &  & 0.195 & 0.386 &  & 0.305 & 0.388 & 0.426 & 0.445 \\
-2-point succ.    & 0.303 &  & 0.254 & 0.257 &  & 0.228 & 0.255 & 0.281 & 0.341 \\
-2-point fail.    & 0.136 &  & 0.078 & 0.378 &  & 0.391 & 0.473 & 0.442 & 0.471 \\
-sl. dunk succ.  & 0.004 &  & 0.004 & 0.285 &  & 0.107 & 0.186 & 0.210 & 0.291 \\
-sl. dunk fail.  & 0.197 &  & 0.047 & 0.027 &  & 0.006 & 0.010 & 0.006 & 0.004 \\
-steal            & 0.555 &  & 0.303 & 0.876 &  & 0.854 & 0.894 & 0.886 & 0.893 \\ \hline \hline
-Mean             & 0.343 &  & 0.221 & 0.469 &  & 0.452 & 0.489 & 0.505 & 0.516 \\ \hline
+3-point succ.    & 0.501 & 0.481 & 0.282 & 0.462 &  & 0.469 & 0.545 & 0.583 & 0.600 \\
+3-point fail.    & 0.370 &  0.428& 0.117 & 0.564 &  & 0.614 & 0.702 & 0.668 & 0.738 \\
+fr-throw succ. & 0.365 &  0.623& 0.319 & 0.876 &  & 0.885 & 0.809 & 0.892 & 0.882 \\
+fr-throw fail. & 0.778 &  0.703& 0.642 & 0.584 &  & 0.700 & 0.641 & 0.671 & 0.516 \\
+layup succ.      & 0.278 & 0.311 & 0.185 & 0.463 &  & 0.416 & 0.472 & 0.489 & 0.500 \\
+layup fail.      & 0.283 &0.300  & 0.195 & 0.386 &  & 0.305 & 0.388 & 0.426 & 0.445 \\
+2-point succ.    & 0.303 &  0.285 & 0.254 & 0.257 &  & 0.228 & 0.255 & 0.281 & 0.341 \\
+2-point fail.    & 0.136 &  0.233 & 0.078 & 0.378 &  & 0.391 & 0.473 & 0.442 & 0.471 \\
+sl. dunk succ.  & 0.004 &  0.171 & 0.004 & 0.285 &  & 0.107 & 0.186 & 0.210 & 0.291 \\
+sl. dunk fail.  & 0.197 &  0.010& 0.047 & 0.027 &  & 0.006 & 0.010 & 0.006 & 0.004 \\
+steal            & 0.555 &  0.473& 0.303 & 0.876 &  & 0.854 & 0.894 & 0.886 & 0.893 \\ \hline \hline
+Mean             & 0.343 &  0.365 & 0.221 & 0.469 &  & 0.452 & 0.489 & 0.505 & 0.516 \\ \hline
   \end{tabular}
 \end{center}
   \caption{Mean average precision for event {\em classification} given
