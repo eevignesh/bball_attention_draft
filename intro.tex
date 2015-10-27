@@ -1,13 +1,14 @@
 
 \section{Introduction}
 
-% When observing a scene, we posess the inate ability to filter out unwanted
-% stimuli \cite{Desimone_ARN95} and focus only on a selected subset of objects.
-% This effect is easily understood in the context of multi-player sports, where
-% we look at only a few key players (Fig.~\ref{fig:pull_figure}) to understand a
-% complete event. Motivated by this observation, we present an event detection
-% method which automatically ``attends" to the most releavant person during
-% different phases of a multi-player event.
+\eat{
+When observing a scene, we posess the inate ability to filter out unwanted
+stimuli \cite{Desimone_ARN95} and focus only on a selected subset of objects.
+This effect is easily understood in the context of multi-player sports, where
+we look at only a few key players (Fig.~\ref{fig:pull_figure}) to understand a
+complete event. Motivated by this observation, we present an event detection
+method which automatically ``attends" to the most releavant person during
+different phases of a multi-player event.}
 
 \begin{figure}[ht!]
 \begin{center}
@@ -48,28 +49,25 @@ poses two challenges in our setting:
 shown in Fig.~\ref{fig:pull_figure}. This presents interesting choices
 for the attention model.
 
-We consider two different attention models. In the first, we allow the
-model to select one player from each frame using a softmax
-distribution.
-In the second, we first perform temporal tracking of players across
-the clip, and then allow the attention model to select one track per
-clip, using a different softmax distribution. We show results for both methods.
+We consider two different attention models. In the first, we allow the model to
+select one player from each frame using a softmax distribution.  In the second,
+we first perform temporal tracking of players across the clip, and then allow
+the attention model to select one track per clip, using a different softmax
+distribution. We show results for both methods.
 
-In summary, the contributions of our are paper are as follows.
-First, we introduce a new  large-scale basketball event dataset with 14K dense temporal annotations
-for long video sequences. 
-Second, we show that our method
-outperforms state-of-the-art methods for the standard tasks of
-classifying isolated clips and of temporally localizing events within
-longer, untrimmed videos.
-Third, we show that our method learns to attend to the relevant
-players, despite never being told which players are relevant in the
-training set.
+In summary, the contributions of our are paper are as follows.  First, we
+introduce a new  large-scale basketball event dataset with 14K dense temporal
+annotations for long video sequences.  Second, we show that our method
+outperforms state-of-the-art methods for the standard tasks of classifying
+isolated clips and of temporally localizing events within longer, untrimmed
+videos.  Third, we show that our method learns to attend to the relevant
+players, despite never being told which players are relevant in the training
+set.
 
 
 \eat{
 While it is possible to treat player detections across frame to be
-disconnected, in practice the detections belong to the same set of plyers. We
+disconnected, in practice the detections belong to the same set of players. We
 could leverage this knowledge by using a player tracker followed by better
 player representations. However, this could lead to additional issues due to
 erroneous tracking and could possibly lower the effectiveness of attention
@@ -88,4 +86,3 @@ large-scale basketball event dataset with 14K dense temporal annotations
 for long video sequences. We outpuerform state-of-the-art
 event recognition methods on the new dataset.
 }
-

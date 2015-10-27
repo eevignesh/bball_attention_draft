@@ -22,7 +22,7 @@ embedding the player features and frame features before feeding to the RNNs.
 We used $32 \times 32$ bins with spatial pyramid pooling for the player appearance
 feature.
 All the event videos clips were four seconds long and subsampled to 6fps.  The
-$\beta$ value was set to $0.5$ for the attention softmax weighting. We used a
+$\tau$ value was set to $0.25$ for the attention softmax weighting. We used a
 batch size of $128$, learning rate of $0.005$ which was reduced by a factor of
 $0.1$ every $10000$ iterations with RMSProp\cite{RMSProp}. The models were trained on
 a cluster of $20$ GPUs for $100k$ iterations over one day.
@@ -102,7 +102,7 @@ are shown in Tab.~\ref{tab:class_res}. We see that ...
 
 In this section, we evaluate the ability of methods to temporally localize events in untrimmed videos.
 We use a sliding window approach, where we slide a $4$ second window
-through all the $190$ basketball videos and try to classify the window into a negative
+through all the basketball videos and try to classify the window into a negative
 class or one of the 11 event classes. We use a stride length of $2$ seconds.
 We treat all windows which do not overalp more than $1$ sec with any of the $11$ annotated
 events as negatives. We use the same setting for training, test and validation.
@@ -247,19 +247,7 @@ line for free-throws and outside the 3-point ring for 3-pointers.
 % -------- Heat Map for youtube videos
 \begin{figure*}[t!]
 \begin{center}
-
-   \subfigure[Free-throw success]{
-                \includegraphics[width=2.2 in]{images/overlayed_freethrow_heatmpa.png}
-                \label{fig:heatmap_ft}
-    }
-   \subfigure[Layup success]{
-                \includegraphics[width=2.2 in]{images/overlayed_layup_heatmpa.png}
-                \label{fig:heatmap_lp}
-    }
-   \subfigure[3-pointer success]{
-                \includegraphics[width=2.2 in]{images/overlayed_3pointer_heatmpa.png}
-                \label{fig:heatmap_3p}
-    }
+  \includegraphics[width=7 in]{images/attention_heatmap_full.pdf}
 \end{center}
    \caption{We show the distribution of the attention over the basketball court
      for different events. We used an affine transform to transform the

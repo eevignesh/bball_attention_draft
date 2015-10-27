@@ -3,10 +3,11 @@
 \long\def\symbolfootnote[#1]#2{\begingroup%
 \def\thefootnote{\fnsymbol{footnote}}\footnote[#1]{#2}\endgroup} 
 
-\newcommand{\TODO}{\textcolor{red}{TO DO:~}}
-\newcommand{\KEVIN}{\textcolor{blue}{Kevin comment:~}}
-\newcommand{\ALEX}{\textcolor{blue}{Alex comment:~}}
-\newcommand{\JOHN}{\textcolor{blue}{Alex comment:~}}
+\newcommand{\TODO}[1]{\textcolor{red}{\textbf{TODO}:~#1}}
+\newcommand{\KEVIN}[1]{\textcolor{blue}{\textbf{Kevin comment}:~#1}}
+\newcommand{\ALEX}[1]{\textcolor{blue}{\textbf{Alex comment}:~#1}}
+\newcommand{\JOHN}[1]{\textcolor{blue}{\textbf{John comment}:~#1}}
+\newcommand{\VIGNESH}[1]{\textcolor{blue}{\textbf{Vignesh comment}:~#1}}
 
 \newcommand{\demi}{\myfrac{1}{2}}
 
