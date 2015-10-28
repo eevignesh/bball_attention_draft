@@ -162,7 +162,7 @@ the ball is highlighted by attention.}
 % -------- Heat Map for youtube videos
 \begin{figure*}[t!]
 \begin{center}
-   \includegraphics[width=1.0\linewidth]{images/visual_examples.pdf}
+   \includegraphics[width=1.0\linewidth]{images/visual_examples_v2.pdf}
 \end{center}
    \caption{Visualization of our attention scores at the begining and ending of different events.
 Each row of the event corresponds to a different video. It is interesting to note that the model
@@ -252,10 +252,12 @@ line for free-throws and outside the 3-point ring for 3-pointers.
   \includegraphics[width=7 in]{images/attention_heatmap_full.pdf}
 \end{center}
    \caption{We show the distribution of the attention over the basketball court
-     for different events. We used an affine transform to transform the
-     attended player's position to a cannonical frame for visualization.
-     Interestingly, the attended court positions are the typical spots from
-     which a player would make a shot for the corresponding event.
+     for different events at different phases of a game.  We aligned all videos
+     temporally to match the frame in which the shot is made.  We used an
+     affine transform to transform the attended player's position to a
+     cannonical frame for visualization.  Interestingly, in the frame of
+     shooting the attended court positions are the typical spots from which a
+     player would make a shot for the corresponding event.
      \KEVIN{Also add basketball positions.}
    }
 \label{fig:att_heatmap}

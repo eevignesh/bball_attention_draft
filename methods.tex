@@ -12,6 +12,17 @@ on specific players during the different phases of the game.
 In this section, we describe our unified model for classifying events
 and identifying the key players.
 
+\begin{figure}[t!]
+\begin{center}
+    \includegraphics[width=3 in]{images/system_figure_1_cropped_v2.pdf}
+\end{center}
+   \caption{Our attention model where each player track is represented by the
+     corresponding BLSTM. The variables in the model are explained in the
+     methods section.  BLSTM stands for ``bidirection long short term memory''.
+}
+\label{fig:model}
+\end{figure}
+
 
 \subsection{Player detection and feature extraction}
 
@@ -109,27 +120,6 @@ multi layer perceptron $\phi$, similar to
 \cite{Bahdnau_arxiv14}. 
 $\tau$ is the softmax temperature parameter.
 This model is illustrated in Figure~\ref{fig:model}(a).
-
-\begin{figure*}[t!]
-\begin{center}
-
-   \subfigure[Attention without tracks]{
-                \includegraphics[width=3 in]{images/system_figure_2_cropped_v2.pdf}
-                \label{fig:heatmap_ft}
-    }
-   \subfigure[Attention with tracks]{
-                \includegraphics[width=3 in]{images/system_figure_1_cropped_v2.pdf}
-                \label{fig:heatmap_lp}
-    }
-\end{center}
-   \caption{Our attention models (a) without tracks and (b) with tracks are
-   shown here. The variables in the model are explained in the methods
- section.
-BLSTM stands for ``bidirection long short term memory''.
-}
-\label{fig:model}
-\end{figure*}
-
 
 \noindent \textbf{Attention model with tracking}
 

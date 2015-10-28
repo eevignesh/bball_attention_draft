@@ -1,13 +1,13 @@
 
 \section{Introduction}
 
-When observing a scene, we posess the inate ability to filter out unwanted
-stimuli \cite{Desimone_ARN95} and focus only on a selected subset of objects.
-This effect is easily understood in the context of multi-player sports, where
-we look at only a few key players (Fig.~\ref{fig:pull_figure}) to understand a
-complete event. Motivated by this observation, we present an event detection
-method which automatically ``attends" to the most releavant person during
-different phases of a multi-player event.
+Event recognition and detection in videos has hugely benefited from the
+introduction of recent large-scale datasets \cite{THUMOS,UCF101,Karpathy_CVPR14,MED11} and models.
+However, this is mainly confined to the domain of single-person actions
+where the videos contain one actor performing a primary activity.
+Another equally important problem is event recognition in
+videos with multiple people. In our work, we present a new model
+and dataset for this specific setting.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -17,42 +17,51 @@ different phases of a multi-player event.
 \label{fig:pull_figure}
 \end{figure}
 
-Acitivity and event recognition in videos has hugely benefited from the
-introduction of many recent large scale datasets \cite{}. However, most of
-these dataset focus on activities performed by a single person.  Multi-person
-datasets like \cite{} are usually restricted to fewer videos.  Further, to
-evaluate event detection, it is desirable to have temporal annotations in long
-untrimmed videos. Since the focus of our work is towards multi-person actions,
-we propose a new dataset of basketball events with time-stamp annotations for
-all occurrences of $11$ different events across $257$ videos each $1.5$ hours
-long in length.  This dataset is comparable to the THUMOS \cite{THUMOS}
-detection dataset in terms of number of annotations and contains longer videos
-catering to a multi-person setting.
+Videos captured in sports arenas, market places or other outdoor areas
+often contain multiple people interacting with each other.
+However, the events in these videos are often
+dominated by a smaller subset. For instance, a ``shot" in a sport
+or ``shop-lifting" in a market is determined by one or two key people.
+In such settings, apart from recognizing the event it is also important
+to isolate the key actors. This is a significant challenge which
+differentiates multi-person videos from single-person videos.
 
-In basketball, many players are always present in the court.
-However, an interesting event like a ``layup" or ``steal" can be attributed
-to just one or two players at the scene. Observing these people at the right
-time holds the cue to understanding the entire event. Furhter, identifying
-these players responsible for the event is an interesting task in its own right.
-Hence, it is natural to develop a model which can ``attend" to these players during
-an event.
+Observing the right people at the right time could hold the cue to
+understanding an entire event. Furhter, identifying the people responsible for
+the event is an interesting task in its own right.  It is also desirable to
+learn a model which does not require annotations for these people during
+training. The model should automatically ``attend" to the key actors while recognizing an event.
 
-Recently, Recurrent Neural Network (RNN) models have been successful in
+Recently, Recurrent Neural Network (RNN) models have been quite successful in
 using ``attention" \cite{Bahdnau_arxiv14,Xu_arxiv15,Yao_arxiv15} for aligning
 elements from an input sequence to those of an output sequence. In these settings,
 the input sequence remains fixed at all times and the model chooses from this
 fixed input at each instant. However, the use of such attention based RNNs
 poses two challenges in our setting:
-1. The set of player detections varies from one frame to the other and
-2. The model needs to adapt attention according to the phase of the game as
+1. The set of person detections varies from one frame to the other and
+2. The model needs to adapt attention according to the phase of the event as
 shown in Fig.~\ref{fig:pull_figure}. This presents interesting choices
 for the attention model.
 
-We consider two different attention models. In the first, we allow the model to
-select one player from each frame using a softmax distribution.  In the second,
-we first perform temporal tracking of players across the clip, and then allow
-the attention model to select one track per clip, using a different softmax
-distribution. We show results for both methods.
+While person detections vary from frame to frame, the people in the event remain
+consistent throughout the video. They can be tracked across all frames and each
+person-track can be treated as a separate sequence. This leads to better RNN
+based representations for each person.  The attention model is then tasked with
+selecting the most releavant track at each time-step in the event.  We also
+analyze another variant of the method without tracking and present results for
+both methods. Apart from event recognition, we also provide a quantitative
+analysis of the attention results generated by our models.
+
+To evaluate our model, we require a large dataset of multi-person activities.
+Multi-person datasets like \cite{Ryoo_ICCV09,VIRAT,Choi_ICCV09} are usually restricted to fewer videos.
+Further, to evaluate event detection, it is desirable to have temporal annotations in long
+untrimmed videos. An easily accessible source of good quality data is
+available in multi-player sports like basketball.
+Hence, we propose a new dataset of basketball events with time-stamp annotations for
+all occurrences of $11$ different events across $257$ videos each $1.5$ hours
+long in length.  This dataset is comparable to the THUMOS \cite{THUMOS}
+detection dataset in terms of number of annotations and contains longer videos
+catering to a multi-person setting.
 
 In summary, the contributions of our are paper are as follows.  First, we
 introduce a new  large-scale basketball event dataset with 14K dense temporal
@@ -62,26 +71,3 @@ isolated clips and of temporally localizing events within longer, untrimmed
 videos.  Third, we show that our method learns to attend to the relevant
 players, despite never being told which players are relevant in the training
 set.
-
-
-\eat{
-While it is possible to treat player detections across frame to be
-disconnected, in practice the detections belong to the same set of players. We
-could leverage this knowledge by using a player tracker followed by better
-player representations. However, this could lead to additional issues due to
-erroneous tracking and could possibly lower the effectiveness of attention
-itself. On the other hand, it is more lucrative to develop an attention model
-without tracking.  This could provide more freedom to switch attention between
-detections based on the state of the event. We explore both these choices in
-our work and compare their event recognition performance as well as ability to
-attend to the right players.
-
-The main contribution of our works is to:
-1. present a time-varying attention model for basketball event detection
-in the presence and absence of player-tracking, 2. We provide a comprehensive
-evaluation of the attention scores generated by our model and show
-their interpretability in our setting and 3. We introduce a novel
-large-scale basketball event dataset with 14K dense temporal annotations
-for long video sequences. We outpuerform state-of-the-art
-event recognition methods on the new dataset.
-}
