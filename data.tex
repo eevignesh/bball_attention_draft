@@ -2,13 +2,14 @@
 \section{NCAA Basketball Dataset}
 
 Most recent activity detection datasets like THUMOS \cite{THUMOS},
-ActivityNet \cite{ActivityNet}, and others such as
-\cite{UCF101,Finegrained_cooking}, mostly contain videos where a single actor is performing the activity.
+ActivityNet \cite{ActivityNet}, UCF101 
+\cite{UCF101}, finegrained cooking \cite{Finegrained_cooking},
+mostly contain videos with a single actor performing one activity.
 By contrast, we are interested in settings where there are multiple
 people in each frame, only a small number of whom are involved with
-the  activity, and where we are interested in recognizing the event
-and the key participants.
-A natural choice for such data is multi-player sports.
+the  activity. In such setting, we are interested in recognizing the event
+as well as the key participants. A natural choice for such data is
+multi-player team sports.
 
 In this paper, we focus on basketball games, although our techniques
 are general purpose.
@@ -18,41 +19,69 @@ played in different venues over different periods of time.
 We only consider the most recent $257$ games, since older games used
 slightly different rules than modern basketball.
 
-The NCAA dataset is accompanied by freeform play-by-play text snippets describing the events
-at a few key-moments in each game.
-Unfortunately, the temporal frequency of this annotation is too sparse
-to be useful for training / testing an event detection system.
-So we decided to use Amazon Mechanical Turk to annote the events in
-these videos. We will release our annotated data upon paper
-acceptance.
+\begin{table}[ht!]
+\begin{center}
+\small
+ \begin{tabular}{|l|c|c|}
+  \hline
+  Event          & \# Videos Train (Test) & Avg. \# people \\ \hline \hline
+  3-point succ.    & 895 (188) &  \\ 
+  3-point fail.    & 1934 (401) &  \\ 
+  free-throw succ. & 552 (94) &  \\ 
+  free-throw fail. & 344 (41) &  \\  
+  layup succ.      & 1212 (233) &  \\ 
+  layup fail.      & 1286 (254) &  \\ 
+  2-point succ.    & 1039 (148) &  \\ 
+  2-point fail.    & 2014 (421) &  \\ 
+  slam dunk succ.  & 286 (54) &  \\ 
+  slam dunk fail.  & 47 (5) &  \\ 
+  steal & 1827 (417) & \\ \hline  
+  \end{tabular}
+\end{center}
+  \caption{The number of videos per event in our dataset along with
+  the average number of people per video corresponding to each of the
+events. The number of people is higher than existing datasets for
+multi-person event recognition.}
+  \label{tab:data_dist}
+\end{table}
 
-To determine the set of events, 
-we clustered the
-play-by-play text to identify the most frequent events from all games. We
-narrowed the event list to $11$ classes,
-listed in Section~\ref{sec:experiments}.
-In particular, we considered 
-5 types of shots, each of which could be succesful or failed,
-plus a steal event. 
 
-Next we setup an AMT task, where the
-annotators were asked to annotate the ``end-point" of these events if and when
-they occur in the videos. 
-To determine the starting time, we assumed that each event was 4
-seconds long. 
-The videos are typically $1.5$ hours long.
+\begin{figure}
+
+  \caption{Our dataset contains timestamp annotations for 11 basketball events
+    in long untrimmed videos. Additionally, we also provide bounding boxes for player
+    detections obtained from a multibox model trained on a subset of training
+  video frames.}
+\end{figure}
+
+The NCAA dataset is accompanied by freeform play-by-play text snippets
+describing the events at a few key-moments in each game.  Unfortunately, the
+temporal frequency of this annotation is too sparse to be useful for training /
+testing an event detection system.  So we decided to use Amazon Mechanical Turk
+(AMT) to annote the events in these videos. We will release our annotated data
+upon paper acceptance.
+
+To determine the set of events, we clustered the play-by-play text to identify
+the most frequent events from all games. We narrowed the event list to $11$
+classes, listed in Tab.~\ref{tab:data_dist}.  In particular, we considered
+5 types of shots, each of which could be succesful or failed, plus a steal
+event. 
+
+We setup an AMT task, where the annotators were asked to annotate the
+``end-point" of these events if and when they occur in the videos.  To
+determine the starting time, we assumed that each event was 4 seconds long.
+The complete game videos are typically $1.5$ hours long.
 
 The videos were randomly split into $212$ training, $12$ validation and $33$
-test videos. 
-We split each of these videos into 4 second clips (using the
-annotation boundaries), and subsampled these to 6fps.
-We filter out clips which are not profile shots (such as those shown in
-Figure~\ref{fig:model}) using a separately trained classifier; this excludes close up shots of players, animations, as
-well as crowd shots.
-This resulted in a total of $11436$ training, $856$ validation
-and $2256$ test clips, each of which has one of 11 labels.
+test videos.  We split each of these videos into 4 second clips (using the
+annotation boundaries), and subsampled these to 6fps.  We filter out clips
+which are not profile shots (such as those shown in Figure~\ref{fig:model})
+using a separately trained classifier; this excludes close up shots of players,
+animations, as well as crowd shots.  This resulted in a total of $11436$
+training, $856$ validation and $2256$ test clips, each of which has one of 11
+labels.
 
-Note that this is comparable in size to the THUMOS'15 detection
+Note that our dataset is comparable in size to the THUMOS'15 detection
 challenge ($XXXX$ trimmed training instances for $20$ classes and $6553$
 untrimmed validation instances). The distribution of annotations across all the
 different events is visualized in Fig.~\ref{fig:data_dist}, with sample videos

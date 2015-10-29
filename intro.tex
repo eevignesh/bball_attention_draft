@@ -11,9 +11,14 @@ and dataset for this specific setting.
 
 \begin{figure}[ht!]
 \begin{center}
-\fbox{\rule{0pt}{2in} \rule{.9\linewidth}{0pt}}
+  \includegraphics[width=3.5 in]{images/pull_figure_v2_cropped.pdf}
 \end{center}
-   \caption{Pull figure.}
+\caption{To recognize multi-person events, it is necessary to observe the right
+person at the right instant. Here, we can identify the
+event to be a ``2-pointer" by observing the shooter at the time of the shot.
+Similarly, we can declare the shot to be ``successful" by looking at the
+person throwing the ball into play at the end. Our model uses a similar approach to detect
+an event by switching focus to the most releavant person at each instant of the video.}
 \label{fig:pull_figure}
 \end{figure}
 

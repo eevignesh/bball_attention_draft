@@ -1,11 +1,5 @@
 \section{Related Work}
 
-\JONATHAN{ I'll take a look for more papers this week.  My feeling is that
-  we're missing literature about sports video analysis.  Kevin’s former student
-  (Wei Lwun's) paper, for example has not been cited yet, and is a pretty
-  relevant.  We might even want to see whether there are good papers cited by
-  that paper.}
-
 \noindent \textbf{Action recognition in videos}
 Traditionally, well engineered features have proved quite effective for video
 classification and retrieval tasks
@@ -26,10 +20,15 @@ We follow this line of work with addition of attention mechanism
 to attend to the event particiapants.
 
 \noindent \textbf{Muti-person video analysis}
-Group activity recognition has also be attempted for small
-datsets by recognizing human interactions in
-\cite{Lan_PAMI12,Choi_ICCV09,Vaswani_CVPR03,Khan_ACM05,Moore_AAAI02,Intille_CVIU01,Khodabandeh_arxiv15}
-\TODO{Refer to Lan et al. for more info}
+Activigy recognition models for events with well defined group structures such
+as parades have been presented in
+\cite{Vaswani_CVPR03,Intille_CVIU01,Moore_AAAI02,Khan_ACM05}.  They utilize the
+structured layout of participants to identify group events. More
+recently, \cite{Lan_PAMI12,Choi_ICCV09,Khodabandeh_arxiv15} use context as a
+cue for recognizing interaction based group activities.  While the models
+multi-person events, these methods are restricted to smaller
+datasets such as UT-Interaction\cite{Ryoo_10}, Collective activity
+\cite{Choi_ICCV09} and Nursing home\cite{Lan_PAMI12}.
 
 \noindent \textbf{Attention models}
 Itti et al. \cite{Itti_PAMI98} explored the idea of saliency based attention in
@@ -37,6 +36,8 @@ images, with other works like \cite{Shapovalova_NIPS13} using eye-gaze data as
 a means for learning attention.
 Other approaches such as Gkioxari et al. \cite{Gkioxari_arxiv14} and Raptis et al. \cite{Raptis_CVPR12}
 automatically localize a spatio-temporal tube in the video corresponding to the action.
+Another similar work\cite{Gkioxari_ICCV15} localize boxes in static images
+for action recognition.
 
 Recently, \cite{Bahdnau_arxiv14} showed that
 attention based RNN models can effectively align input words in a sentence to
@@ -60,7 +61,7 @@ There are also fine-grained datasets
 in specific domains such as MPII cooking \cite{Finegrained_cooking} and breakfast \cite{Breakfast}.
 However, most of these dataset focus on single-person activities with hardly
 any need for recognizing the people responsible for the event. On the other
-hand, publicly available multi-person activity datasets \cite{Choi_ICCV09,Ryoo_10} are restricted
+hand, publicly available multi-person activity datasets \cite{Choi_ICCV09,Ryoo_10,VIRAT} are restricted
 to a very small number of videos.  One of the contributions of our work is 
 a multi-player basketball dataset with dense temporal event annotations in
 long videos. We provide more details in the next section.
