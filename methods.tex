@@ -1,16 +1,16 @@
 \section{Our Method}
 
-All events in a basketball game are performed in the same scene by the same set
+All events in a team sport are performed in the same scene by the same set
 of players. The only basis for differentiating these events is the action
-pefromed by a small subset of players at a given time.  For instance, a
-``steal" event is completely defined by the action of the player attempting to
+pefromed by a small subset of people at a given time.  For instance, a
+``steal" event in basketball is completely defined by the action of the player attempting to
 pass the ball and the player stealing from him.  To understand such an event,
 it is sufficient to observe only these players pariticipating in the event.
 
 This motivates us to build a model which can reason about an event by focusing
-on specific players during the different phases of the game.
+on specific people during the different phases of the event.
 In this section, we describe our unified model for classifying events
-and identifying the key players.
+and simultaneously identifying the key players.
 
 \begin{figure}[t!]
 \begin{center}
@@ -24,27 +24,18 @@ and identifying the key players.
 \end{figure}
 
 
-\subsection{Player detection and feature extraction}
+\subsection{Feature extraction}
 
-We used AMT to annotate the location of all the players in a subset \KEVIN{HOW BIG?}
-of the training data. We then trained a Multibox detector to detect players,
-and ran this on all the training and test videos.  We kept all detections above
-a confidence of 0.5 per frame; this resulted in between 0 and 10 bounding
-boxes per frame.  These detected player bounding boxs will also by the
-multi-box model will be made available in the dataset.
-
-Each video-frame  is represented by a feature vector $f_t$, which is the activation
-of the last fully connected layer of Inception7 network \TODO{Get citation Jonathan Krause}
-\cite{} trained on ImageNet \cite{}.  In addition, we compute spatially localized features.  In particular,
+Each video-frame is represented by a feature vector $f_t$, which is the activation
+of the last fully connected layer of Inception7 network
+\cite{Ioffe_arxiv15,Inception7}.  In addition, we compute spatially localized features
+for each person in the frame. In particular,
 $p_{ti}$ contains both appearance and spatial information for the $i$'th
-player bounding box in frame $t$. Similar to RCNN object detector\cite{},
+player bounding box in frame $t$. Similar to the RCNN object detector\cite{},
 the appearance features were extracted by feeding
-the cropped and resized player region from the frame through GoogLeNet and
+the cropped and resized player region from the frame through the Inception7 network and
 spatially pooling the response from a lower layer. The spatial feature
 corresponds to a spatial histogram indicating the bounding box location.
-\TODO{Include the precision for person detection from multibox.}
-\VIGNESH{Should we include feature details here? I would prefer putting these
-in more detail in the supp. material}
 
 \subsection{Event classification}
 
@@ -58,12 +49,12 @@ a bidirectional LSTM applied to the frame-level feature as shown in Fig.~\ref{fi
 This is a concatenation of the hidden states from the forward and reverse LSTM
 components of a BLSTM and can be compactly represented as:
 \[
-h_t^f = \mbox{BLSTM}(h_{t-1}^f, h_{t+1}^f, f_t).
+  h_t^f = \mbox{BLSTM}_{frame}(h_{t-1}^f, h_{t+1}^f, f_t).
 \]Please refer to Graves et al. \cite{Graves_2013} or the supp. material
 for the full equations.
 
 Next we use use a unidirectional LSTM to represent the state of the
-game at time $t$:
+event at time $t$:
 \[
 h_t^e = \mbox{LSTM}(h_{t-1}^e, h_t^f, a_t)
 \]
@@ -80,15 +71,15 @@ class $k$ is denoted by $w_k$.
 
 \subsection{Attention models}
 \VIGNESH{I have added back my original motivation section for the attention model. I felt
-that the section was descriptive and didn't motivate the method
+that the section was otherwise very descriptive and didn't motivate the method
 sufficiently}
 
 Unlike past attention models \cite{}, we need to attend to a different set of
 features at each time-step. There are two key issues to address in this
 setting.
 
-First, although we have different set of detections in each frame, the player
-detections can be connected across the frames through an object tracking
+First, although we have different detections in each frame, they
+can be connected across the frames through an object tracking
 method. This could potentially lead to better feature representation of the
 players.
 
@@ -98,8 +89,40 @@ important to attend to the player making the shot. However, towards the end of
 the event the success or failure of the shot can be judged by observing the
 person in posession of the ball.
 
-With these issues in mind, we explore two models:
-one without an object tracker and the other using an object tracker.
+With these issues in mind, we first present our model which uses player tracks
+and learns a BLSTM based representation for each player track. Next, we also
+present a simple tracking-free baseline model.
+
+\noindent \textbf{Attention model with tracking}
+
+We first associate the detecitons
+belonging to the same player into tracks using a standard
+tracking method. We use a KLT tracker combined with
+bipartite graph matching \cite{} to perform the data association.
+
+We use a separate BLSTM to learn a better context based
+representation for each player at a given time-step.
+The latent representation of player $i$ in frame $t$ is
+given by the hidden state
+$h_{ti}^p$ of the BLSTM across the player-track:
+\[
+  h_{ti}^p = \mbox{BLSTM}_{track}(h_{t-1,i}^p, h_{t+1,i}^p, p_{ti}).
+\]
+
+To compute $a_t$, we take a convex combination of the player features:
+\begin{eqnarray} 
+\label{eq:track}
+  a_t^{track} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{track} p_{ti} 
+\\ \nonumber
+  \gamma_{ti}^{track} & = & \text{softmax} \left(\phi\left(h^f_t, h^p_{ti}, h^e_{t-1}\right); \tau\right),
+\end{eqnarray}where $N_t$ is the number of detections in frame $t$, and $\phi()$ is a 
+multi layer perceptron, similar to \cite{Bahdnau_arxiv14}. $\tau$ is the softmax temperature parameter.
+
+This model is illustrated in Figure~\ref{fig:model}.
+Later, we show that this method achieves better
+performance at event classification and detection compared to a
+tracking-free model. However, it could result in slightly worse ``key player"
+identifcation due to tracking errors.
 
 \noindent \textbf{Attention model without tracking}
 Here, we treat the detections in each frame to be independent from other
@@ -108,43 +131,10 @@ between players as the event progresses.  As we later observe empirically, this
 leads to better interpretability.  Also, the model does not suffer from
 tracking errors.
 
-To compute $a_t$, we take a convex combination of the player features:
+We then compute the attention based player feature as shown below:
 \begin{eqnarray} 
 \label{eq:notrack}
   a_t^{notrack} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{notrack} p_{ti} 
 \\ \nonumber
   \gamma_{ti}^{notrack} & = & \text{softmax} \left(\phi\left(h^f_t, p_{ti}, h^e_{t-1}\right); \tau\right),
 \end{eqnarray}
-where $N_t$ is the number of detections in frame $t$,
-and $\phi()$ is a 
-multi layer perceptron $\phi$, similar to
-\cite{Bahdnau_arxiv14}. 
-$\tau$ is the softmax temperature parameter.
-This model is illustrated in Figure~\ref{fig:model}(a).
-
-\noindent \textbf{Attention model with tracking}
-
-One potential weakness of the previous model is that the
-player being attended to can change from frame to frame.
-An alternative approach is to first associated detecitons
-belonging to the same player into tracks using a standard
-tracking method. We use a standard KLT tracker combined with
-bipartite graph matching to perform the data association.
-We then compute the attention scores as shown below:
-
-\begin{eqnarray} 
-\label{eq:track}
-  a_t^{track} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{track} p_{ti} 
-\\ \nonumber
-  \gamma_{ti}^{track} & = & \text{softmax} \left(\phi\left(h^f_t, h^p_{ti}, h^e_{t-1}\right); \tau\right),
-\end{eqnarray}
-where $h_{ti}^p$ is the latent represnetation of player $i$ in frame
-$t$ computed using a BLSTM across tracks:
-\[
-  h_{ti}^p = \mbox{BLSTM}(h_{t-1,i}^p, h_{t+1,i}^p, p_{ti})
-\]
-This model is illustrated in Figure~\ref{fig:model}(b).
-Below  we show that although this method gives slightly better
-performance at event classification, it gives worse results for player
-identification, because it is sensitive to tracking errors, and
-is often unable to switch between players within an event.
