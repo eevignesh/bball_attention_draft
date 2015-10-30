@@ -2,6 +2,34 @@
 \section{Experiments}
 \label{sec:experiments}
 
+\begin{table*}[ht!]
+\begin{center}
+\small
+ \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
+  \hline
+Event & IDT\cite{Wang_CVPR11} & IDT\cite{Wang_CVPR11} player & C3D \cite{Tran_arxiv14} & LRCN \cite{Donahue_arxiv14} & MIL\cite{} & Only player & Avg. player & Our no track & Our track \\ \hline \hline
+
+3-point succ.    & 0.370 & 0.428 & 0.117 & 0.462 &  & 0.469 & 0.545 & 0.583 & 0.600 \\
+3-point fail.    & 0.501 &  0.481& 0.282 & 0.564 &  & 0.614 & 0.702 & 0.668 & 0.738 \\
+fr-throw succ. & 0.778 &  0.703& 0.642 & 0.876 &  & 0.885 & 0.809 & 0.892 & 0.882 \\
+fr-throw fail. & 0.365 &  0.623& 0.319 & 0.584 &  & 0.700 & 0.641 & 0.671 & 0.516 \\
+layup succ.      & 0.283 & 0.300 & 0.195 & 0.463 &  & 0.416 & 0.472 & 0.489 & 0.500 \\
+layup fail.      & 0.278 &0.311  & 0.185 & 0.386 &  & 0.305 & 0.388 & 0.426 & 0.445 \\
+2-point succ.    & 0.136 &  0.233 & 0.078 & 0.257 &  & 0.228 & 0.255 & 0.281 & 0.341 \\
+2-point fail.    & 0.303 &  0.285 & 0.254 & 0.378 &  & 0.391 & 0.473 & 0.442 & 0.471 \\
+sl. dunk succ.  & 0.197 &  0.010 & 0.047 & 0.285 &  & 0.107 & 0.186 & 0.210 & 0.291 \\
+sl. dunk fail.  & 0.004 &  0.171& 0.004 & 0.027 &  & 0.006 & 0.010 & 0.006 & 0.004 \\
+steal            & 0.555 &  0.473& 0.303 & 0.876 &  & 0.854 & 0.894 & 0.886 & 0.893 \\ \hline \hline
+Mean             & 0.343 &  0.365 & 0.221 & 0.469 &  & 0.452 & 0.489 & 0.505 & \textbf{0.516} \\ \hline
+  \end{tabular}
+\end{center}
+  \caption{Mean average precision for event {\em classification} given
+    isolated clips.}
+  \label{tab:event_class}
+  \label{tab:class_res}
+\end{table*}
+
+
 In this section, we present three sets of experiments on the NCAA basketball
 dataset: 1. event classification, 2. event detection and 3. evaluation of
 attention
@@ -39,34 +67,6 @@ against different control settings and baseline models as explained
 below:
 
 \KEVIN{Tables 1 and 2 are an overwhelming number of numbers. Can you make a barchart?}
-
-
-\begin{table*}[t!]
-\begin{center}
-\small
- \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
-  \hline
-Event & IDT\cite{Wang_CVPR11} & IDT\cite{Wang_CVPR11} player & C3D \cite{Tran_arxiv14} & LRCN \cite{Donahue_arxiv14} & MIL\cite{} & Only player & Avg. player & Our no track & Our track \\ \hline \hline
-
-3-point succ.    & 0.370 & 0.428 & 0.117 & 0.462 &  & 0.469 & 0.545 & 0.583 & 0.600 \\
-3-point fail.    & 0.501 &  0.481& 0.282 & 0.564 &  & 0.614 & 0.702 & 0.668 & 0.738 \\
-fr-throw succ. & 0.778 &  0.703& 0.642 & 0.876 &  & 0.885 & 0.809 & 0.892 & 0.882 \\
-fr-throw fail. & 0.365 &  0.623& 0.319 & 0.584 &  & 0.700 & 0.641 & 0.671 & 0.516 \\
-layup succ.      & 0.283 & 0.300 & 0.195 & 0.463 &  & 0.416 & 0.472 & 0.489 & 0.500 \\
-layup fail.      & 0.278 &0.311  & 0.185 & 0.386 &  & 0.305 & 0.388 & 0.426 & 0.445 \\
-2-point succ.    & 0.136 &  0.233 & 0.078 & 0.257 &  & 0.228 & 0.255 & 0.281 & 0.341 \\
-2-point fail.    & 0.303 &  0.285 & 0.254 & 0.378 &  & 0.391 & 0.473 & 0.442 & 0.471 \\
-sl. dunk succ.  & 0.197 &  0.010 & 0.047 & 0.285 &  & 0.107 & 0.186 & 0.210 & 0.291 \\
-sl. dunk fail.  & 0.004 &  0.171& 0.004 & 0.027 &  & 0.006 & 0.010 & 0.006 & 0.004 \\
-steal            & 0.555 &  0.473& 0.303 & 0.876 &  & 0.854 & 0.894 & 0.886 & 0.893 \\ \hline \hline
-Mean             & 0.343 &  0.365 & 0.221 & 0.469 &  & 0.452 & 0.489 & 0.505 & \textbf{0.516} \\ \hline
-  \end{tabular}
-\end{center}
-  \caption{Mean average precision for event {\em classification} given
-    isolated clips.}
-  \label{tab:event_class}
-  \label{tab:class_res}
-\end{table*}
 
 \begin{itemize}
   \item \emph{IDT\cite{Wang_CVPR11}} We use the publicly available implementation of dense trajectories with
