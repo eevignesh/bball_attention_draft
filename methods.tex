@@ -1,4 +1,5 @@
-\section{Our Method}
+\section{Methods}
+\label{sec:methods}
 
 \eat{
 All events in a basketball game are performed in the same scene by the same set
@@ -24,9 +25,10 @@ and identifying the key players.
 We used AMT to annotate the location of all the players in a subset \KEVIN{HOW BIG?}
 of the training data. We then trained a Multibox detector to detect players,
 and ran this on all the training and test videos.  We kept all detections above
-a confidence of 0.5 per frame; this resulted in between 0 and 10 (?) bounding
-boxes per frame.  These detected player bounding boxs will also by the
-multi-box model will be made available in the dataset.
+a confidence of 0.5 per frame; this resulted in between 0 and 10 (\KEVIN{10?}) bounding
+boxes per frame. 
+%These detected player bounding boxes will also by the
+%multi-box model will be made available in the dataset.
 
 \eat{
 Given a set of basketball video clips, we first preprocess the clips to extract
@@ -48,27 +50,28 @@ boxes at time $t$.
 in the video.
 }
 
-Each video-frame  is represented by a feature vector $f_t$, which is the activation
+Frame $t$ is represented by a feature vector $f_t$, which is the activation
 of the last fully connected layer of GoogLeNet \cite{} trained on ImageNet
 \cite{}.  In addition, we compute spatially localized features.  In particular,
 $p_{ti}$ contains both appearance and spatial information for the $i$'th
-player bounding box in frame $t$. Similar to RCNN object detector\cite{},
+player's bounding box in frame $t$. Similar to the RCNN object detector\cite{},
 the appearance features were extracted by feeding
 the cropped and resized player region from the frame through GoogLeNet and
 spatially pooling the response from a lower layer. The spatial feature
-corresponds to a spatial histogram indicating the bounding box location.  
-\VIGNESH{Should we include feature details here? I would prefere putting these
-in more detail in the supp. material}
+corresponds to a 32 x 32 spatial histogram, combined with a spatial
+pyramid,
+to indicate the bounding box location at multiple scales.
+
 
 \subsection{Event classification}
 
-Given $f_t$ and $p_{ti}$ for each frame $t$ from $1$ to $T$, our goal
+Given $f_t$ and $p_{ti}$ for $t=1:T$, our goal
 is to train the model to classify the clip into one of 11 categories. As a side
 effect of the way we construct our model, we will also be able to identify the
-key player in each frame.
+key players in each frame.
 
 First we compute a global context feature for each frame, $h_t^f$, derived from
-a bidirectional LSTM applied to the frame-level feature as shown in Fig.~\ref{fig:system_fig}.
+a bidirectional LSTM applied to the frame-level feature as shown in Fig.~\ref{fig:model}.
 This is a concatenation of the hidden states from the forward and reverse LSTM
 components of a BLSTM and can be compactly represented as:
 \[
@@ -83,20 +86,19 @@ h_t^e = \mbox{LSTM}(h_{t-1}^e, h_t^f, a_t)
 \]
 where $a_t$ is a feature vector derived from the players, as we
 describe below.
-From this, we can predict the class label for the clip using $w_k^T
-h_t^e$. We measure the loss as follows:
+From this, we can predict the class label for the clip using
+$w_k^{\transpose} h_t^e$,
+where the weight vector corresponding to
+class $k$ is denoted by $w_k$.
+ We measure the loss as follows:
 \begin{equation}
-  L =   \frac{1}{2} \sum_{t=1}^T \sum_{k = 1}^K \max (0, 1 - y_k w_k^T h^e_t)^2
+  L =   \frac{1}{2} \sum_{t=1}^T \sum_{k = 1}^K \max (0, 1 - y_k w_k^{\transpose} h^e_t)^2
 \end{equation} 
 where $y_k$ is $1$ if the video belongs to class $k$,
-else it is $-1$, and the weight vector corresponding to
-class $k$ is denoted by $w_k$.
+else it is $-1$.
 
 \subsection{Attention models}
-\VIGNESH{I have added back my original motivation section for the attention model. I felt
-that the section was descriptive and didn't motivate the method
-sufficiently}
-Unlike past attention models \cite{}, we need to attend to a different set of
+Unlike past attention models, we need to attend to a different set of
 features at each time-step. There are two key issues to address in this
 setting.
 
@@ -109,14 +111,14 @@ Second, player attention depends on the state of the event and needs to evolve
 with the event.  For instance, during the start of a ``free-throw" it is
 important to attend to the player making the shot. However, towards the end of
 the event the success or failure of the shot can be judged by observing the
-person in posession of the ball.
+person in possession of the ball.
 
 With these issues in mind, we explore two models:
-one without an object tracker and the other using an object tracker.
+one without a person  tracker and the other using a person tracker.
 
 
 \noindent \textbf{Attention model without tracking}
-Here, we treat the detections in each frame to be independent from other
+Here, we treat the detections in each frame as independent from other
 frames.  This alows the model to be more flexible in switching attention
 between players as the event progresses.  As we later observe empirically, this
 leads to better interpretability.  Also, the model does not suffer from
@@ -131,9 +133,10 @@ To compute $a_t$, we take a convex combination of the player features:
 \end{eqnarray}
 where $N_t$ is the number of detections in frame $t$,
 and $\phi()$ is a 
-multi layer perceptron $\phi$, similar to
+multi layer perceptron $\phi$, 
+and $\tau$ is the softmax temperature parameter,
+similar to
 \cite{Bahdnau_arxiv14}. 
-$\tau$ is the softmax temperature parameter.
 This model is illustrated in Figure~\ref{fig:model}(a).
 
 \begin{figure*}[t!]
@@ -148,32 +151,33 @@ This model is illustrated in Figure~\ref{fig:model}(a).
                 \label{fig:heatmap_lp}
     }
 \end{center}
-   \caption{Our attention models (a) without tracks and (b) with tracks are
-   shown here. The variables in the model are explained in the methods
- section.
-BLSTM stands for ``bidirection long short term memory''.
+   \caption{Our attention models (a) without tracks and (b) with tracks.
+BLSTM stands for ``bidirectional long short term memory''.
+See text for details.
 }
 \label{fig:model}
 \end{figure*}
 
 
 \noindent \textbf{Attention model with tracking}
-
 One potential weakness of the previous model is that the
 player being attended to can change from frame to frame.
-An alternative approach is to first associated detecitons
+An alternative approach is to first associated detections
 belonging to the same player into tracks using a standard
 tracking method. We use a standard KLT tracker combined with
-bipartite graph matching to perform the data association.
+bipartite graph matching to perform the data association
+\cite{Veenman_PAMI2001}.
 We then compute the attention scores as shown below:
-
+%
 \begin{eqnarray} 
 \label{eq:track}
   a_t^{track} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{track} p_{ti} 
 \\ \nonumber
   \gamma_{ti}^{track} & = & \text{softmax} \left(\phi\left(h^f_t, h^p_{ti}, h^e_{t-1}\right); \tau\right),
 \end{eqnarray}
-where $h_{ti}^p$ is the latent represnetation of player $i$ in frame
+This is the same as before, except 
+that instead of the observed player features $p_{ti}$, 
+we use $h_{ti}^p$, which is the latent representation of player $i$ in frame
 $t$ computed using a BLSTM across tracks:
 \[
   h_{ti}^p = \mbox{BLSTM}(h_{t-1,i}^p, h_{t+1,i}^p, p_{ti})
@@ -277,3 +281,18 @@ train the model by minimizing the following one-vs-all hinge loss:
 else it is $-1$, and the weight vector corresponding to
 class $k$ is denoted by $w_k$.
 }
+
+\subsection{Implementation details}
+
+ We used a hidden state dimension of $256$ for all the LSTM and
+BLSTM RNNs, an embedding layer with ReLU non-linearity and $256$ dimension for
+embedding the player features and frame features before feeding to the RNNs.
+We used $32 \times 32$ bins with spatial pyramid pooling for the player appearance
+feature.
+All the event videos clips were four seconds long and subsampled to 6fps.  The
+$\tau$ value was set to $0.25$ for the attention softmax weighting. We used a
+batch size of $128$, learning rate of $0.005$ which was reduced by a factor of
+$0.1$ every $10000$ iterations with RMSProp\cite{RMSProp}. The models were trained on
+a cluster of $20$ GPUs for $100k$ iterations over one day.
+The hyperparameters were chosen by cross-validating on the
+validation set.

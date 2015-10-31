@@ -1,5 +1,5 @@
 
-\section{Experiments}
+\section{Experimental evaluation}
 \label{sec:experiments}
 
 In this section, we present three sets of experiments on the NCAA basketball
@@ -14,20 +14,6 @@ contribution of our paper is to provide both a qualitative and a quantitative
 analyis of the attention scores.
 }
 
-\subsection{Implementation details}
-
- We used a hidden state dimension of $256$ for all the LSTM and
-BLSTM RNNs, an embedding layer with ReLU non-linearity and $256$ dimension for
-embedding the player features and frame features before feeding to the RNNs.
-We used $32 \times 32$ bins with spatial pyramid pooling for the player appearance
-feature.
-All the event videos clips were four seconds long and subsampled to 6fps.  The
-$\tau$ value was set to $0.25$ for the attention softmax weighting. We used a
-batch size of $128$, learning rate of $0.005$ which was reduced by a factor of
-$0.1$ every $10000$ iterations with RMSProp\cite{RMSProp}. The models were trained on
-a cluster of $20$ GPUs for $100k$ iterations over one day.
-The hyperparameters were chosen by cross-validating on the
-validation set.
 
 \subsection{Event classification}
 
@@ -44,7 +30,9 @@ below:
 \small
  \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
   \hline
-Event & IDT\cite{Wang_CVPR11} & IDT\cite{Wang_CVPR11} player & C3D \cite{Tran_arxiv14} & LRCN \cite{Donahue_arxiv14} & MIL\cite{} & Only player & Avg. player & Our no track & Our with track \\ \hline \hline
+Event & IDT& IDT player & C3D
+ & LRCN  & MIL & Only
+player & Avg. player & Attn no track & Attn with track \\ \hline \hline
 
 3-point succ.    & 0.501 & 0.481 & 0.282 & 0.462 &  & 0.469 & 0.545 & 0.583 & 0.600 \\
 3-point fail.    & 0.370 &  0.428& 0.117 & 0.564 &  & 0.614 & 0.702 & 0.668 & 0.738 \\
@@ -74,7 +62,7 @@ Mean             & 0.343 &  0.365 & 0.221 & 0.469 &  & 0.452 & 0.489 & 0.505 & 0
   bounding boxes.
 
   \item \emph{C3D \cite{Tran_arxiv14}} We use the publicly available pre-trained model for feature extraction
-  with a SVM classifier.
+  with an SVM classifier.
 
   \item \emph{LRCN \cite{Donahue_arxiv14}} This is a baseline model where we use a simple BLSTM on frame-level features similar
   to LRCN. The only difference is the use of BLSTM in place of LSTM. We found this to improve
@@ -95,7 +83,14 @@ using  attention.
 \end{itemize}
 
 The mean average precision (mAP)
-are shown in Tab.~\ref{tab:class_res}. We see that ...
+are shown in Tab.~\ref{tab:class_res}. We see that the method that
+uses both global information and local player information outperforms
+only using player information. We also show that combining the player
+information using a weighted sum (i.e., an attention model) is better
+than uniform averaging, with the tracking based version of attention
+slightly better than the track-free version.
+Note that the performance is much poorer (for all methods) for classes
+such as ``slam dunk fail'' for which we have very little data.
 
 
 \subsection{Event detection}
@@ -114,7 +109,8 @@ This leads to $90200$ negative examples across all the videos.
 \small
  \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
   \hline
-Event & IDT\cite{Wang_CVPR11} & IDT player\cite{Wang_CVPR11} & C3D \cite{Tran_arxiv14} & LRCN \cite{Donahue_arxiv14} & MIL\cite{} & Only player & Avg. player & Our no track & Our with track \\ \hline \hline
+Event & IDT & IDT player& C3D  & LRCN  & MIL
+ & Only player & Avg. player & Attn no track & Attn with track \\ \hline \hline
 3-point succ.  &  &  &  & 0.505 &  & 0.526 & 0.521 & 0.556 & 0.600 \\
 3-point fail.  &  &  &  & 0.230 &  & 0.251 & 0.268 & 0.263 & 0.239 \\
 fr-throw succ. &  &  &  & 0.122 &  & 0.059 & 0.009 & 0.005 & 0.045 \\
@@ -136,12 +132,17 @@ Mean             &  &  &  & 0.400 &  & 0.408 & 0.414 & 0.426 & 0.435 \\ \hline
 
  The detection results
 are presented in Tab.~\ref{tab:detection_res}.
-We see that  ...
-
+We see that, as before, the attention models beat previous state of
+the art methods.
+Not surprisingly, all methods are slightly worse at temporal
+localization
+than for classifying
+isolated clips.
 
 \subsection{Analyzing attention}
 
-We have seen above that attention can improve the performance of the model at tasks such as classification and detection.
+We have seen above that attention can improve the performance of the
+model at tasks such as classification and detection. 
 In this section, we evaluate how accurate the attention models are at
 identifying the key players. (Note that the models were never
 explicitly trained to identify key players).
@@ -170,13 +171,7 @@ the shot is completed.}
 \end{figure*}
 % ---------------------------------------------------------------------------------
 
-To evaluate this, 
-we collected AMT annotations on $850$ video clips in the test
-set, where the annotators were asked to mark the position of the ball
-on the frame where the shooter attempts a shot.
-This provided us the location of the player shooting the ball.
-We used these annotations to evaluate if our ``attention" scores
-were capable of classifying the ``shooter" correctly in these frames.
+
 
 \begin{table}[ht!]
 \begin{center}
@@ -184,16 +179,16 @@ were capable of classifying the ``shooter" correctly in these frames.
  \begin{tabular}{|l|c|c|c|}
   \hline
 Event            & Chance & Attn. no track & Attn. with track \\ \hline \hline
-3-point succ.    & 0.519 & 0.333 & \\ 
-3-point fail.    & 0.545 & 0.334 & \\ 
-free-throw succ. & 0.772 & 0.376 & \\ 
-free-throw fail. & 0.685 & 0.346 & \\  
-layup succ.      & 0.627 & 0.386 & \\ 
-layup fail.      & 0.605 & 0.382 & \\ 
-2-point succ.    & 0.554 & 0.355 & \\ 
-2-point fail.    & 0.542 & 0.346 & \\ 
-slam dunk succ.  & 0.686 & 0.413 & \\ 
-slam dunk fail.  & 0.645 & 0.499 & \\ \hline \hline  
+3-point succ.    & 0.333 & 0.519 & \\ 
+3-point fail.    & 0.334 & 0.545 & \\ 
+free-throw succ. & 0.376 & 0.772 & \\ 
+free-throw fail. & 0.346 & 0.685 &  \\  
+layup succ.      & 0.386 & 0.627 & \\ 
+layup fail.      & 0.382 & 0.605 &\\ 
+2-point succ.    & 0.355 & 0.554 &\\ 
+2-point fail.    & 0.346 & 0.542 &\\ 
+slam dunk succ.  & 0.413 &  0.686 &\\ 
+slam dunk fail.  & 0.499 & 0.645 & \\ \hline \hline  
 Mean             & 0.377 & 0.618 & \\ \hline
   \end{tabular}
 \end{center}
@@ -201,9 +196,15 @@ Mean             & 0.377 & 0.618 & \\ \hline
   \label{tab:attention_res}
 \end{table}
 
-The mean AP for this ``shooter"  classifcation is listed
+To evaluate the attention models, we  labeled the player who was
+closest (in image space) to the ball as the ``shooter''.
+(The ball location is annotated in 850 test clips.)
+We used these annotations to evaluate if our ``attention" scores
+were capable of classifying the ``shooter" correctly in these frames.
+
+The mean AP for this ``shooter"  classification is listed
 in Tab.~\ref{tab:attention_res}.
-The results show that the track-free model is quite consistent in picking
+The results show that the track-free attention model is quite consistent in picking
 the shooter for several classes like ``free-throw succ./fail",
 ``layup succ./fail." and ``slam dunk succ.". This is a very
 promising result which shows that attention on player detections
@@ -222,10 +223,10 @@ event. For instance, in free-throws Fig.~\ref{fig:track_spec_att} we see that
 the model always attends to the defender at a specific position, who is visible
 throughout the entire event unlike the shooter.
 
-Since the identity of an event often depends on the position of the
-shooter with respect to the court, we decided to evaluate the
-normalized locations of the attended players.
-Specifically, we annotated 5 points on the courts and
+In addition to the above quantitative evaluation, we wanted to
+visualize the attention masks visually.
+In order to make results comparable across frames, 
+we annotated 5 points on the court and
 aligned all the attended boxes for an event to one cannonical image. 
 Fig.~\ref{fig:att_heatmap} shows a heatmap  showing the spatial distributions
 of the attended players with respect to the court. It is interesting to note that
@@ -247,14 +248,14 @@ line for free-throws and outside the 3-point ring for 3-pointers.
 % -------- Heat Map for youtube videos
 \begin{figure*}[t!]
 \begin{center}
-  \includegraphics[width=7 in]{images/attention_heatmap_full.pdf}
+%  \includegraphics[width=7 in]{images/attention_heatmap_full.pdf}
+  \includegraphics[width=5in]{images/heatmap_figure_cropped.pdf}
 \end{center}
    \caption{We show the distribution of the attention over the basketball court
      for different events. We used an affine transform to transform the
      attended player's position to a cannonical frame for visualization.
      Interestingly, the attended court positions are the typical spots from
      which a player would make a shot for the corresponding event.
-     \KEVIN{Also add basketball positions.}
    }
 \label{fig:att_heatmap}
 \end{figure*}
