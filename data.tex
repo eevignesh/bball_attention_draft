@@ -1,5 +1,6 @@
 
 \section{NCAA Basketball Dataset}
+\label{sec:data}
 
 Most recent activity detection datasets like THUMOS \cite{THUMOS},
 ActivityNet \cite{ActivityNet}, UCF101 
@@ -18,7 +19,9 @@ YouTube\footnote{https://www.youtube.com/user/ncaaondemand}.  These games are
 played in different venues over different periods of time.
 We only consider the most recent $257$ games, since older games used
 slightly different rules than modern basketball.
+The videos are typically $1.5$ hours long.
 
+<<<<<<< HEAD
 \begin{table}[ht!]
 \begin{center}
 \small
@@ -82,11 +85,59 @@ training, $856$ validation and $2256$ test clips, each of which has one of 11
 labels.
 
 Note that our dataset is comparable in size to the THUMOS'15 detection
+=======
+\eat{
+The NCAA dataset is accompanied by freeform play-by-play text snippets describing the events
+at a few key-moments in each game.
+Unfortunately, the temporal frequency of this annotation is too sparse
+to be useful for training / testing an event detection system.
+So we decided to use Amazon Mechanical Turk to annote the events in
+these videos. 
+We will release our annotated data upon paper
+acceptance.
+}
+
+We manually identified $11$ key event types
+listed in Section~\ref{sec:experiments}.
+In particular, we considered 
+5 types of shots, each of which could be succesful or failed,
+plus a steal event. 
+
+Next we setup an Amazon Mechanical Turk task, where the
+annotators were asked to annotate the ``end-point" of these events if and when
+they occur in the videos; end points are usually well-defined (e.g.,
+the ball leaves the shooters hands and lands somewhere else, such as
+in the basket).
+To determine the starting time, we assumed that each event was 4
+seconds long, since it is hard to get raters to agree on when an event
+started. 
+
+
+The videos were randomly split into $212$ training, $12$ validation and $33$
+test videos. 
+We split each of these videos into 4 second clips (using the
+annotation boundaries), and subsampled these to 6fps.
+We filter out clips which are not profile shots (such as those shown in
+Figure~\ref{fig:model}) using a separately trained classifier; this excludes close up shots of players, animations, as
+well as crowd shots.
+This resulted in a total of $11436$ training, $856$ validation
+and $2256$ test clips, each of which has one of 11 labels.
+Note that this is comparable in size to the THUMOS'15 detection
+>>>>>>> 9217d0e650c738bf0d9a80541fa1521fcbd746a5
 challenge ($XXXX$ trimmed training instances for $20$ classes and $6553$
 untrimmed validation instances). The distribution of annotations across all the
 different events is visualized in Fig.~\ref{fig:data_dist}, with sample videos
-for a few event classes. To the best of our
+for a few event classes. 
+
+In addition to annotating the event label and start/ end time,
+we collected AMT annotations on $850$ video clips in the test
+set, where the annotators were asked to mark the position of the ball
+on the frame where the shooter attempts a shot.
+From this, we can infer which player is shooting the ball.
+
+To the best of our
 knowledge, this is the first dataset with dense temporal annotations for
+<<<<<<< HEAD
 such long video sequences.
 
 \noindent \textbf{Player detections}
@@ -101,3 +152,8 @@ with ground-truth bounding boxes in the validation videos.
  \TODO{Get exact numbers from John.}
 These detected player bounding boxes from the
 multi-box model will also be made available with the dataset.
+=======
+such long video sequences, including ball annotations.
+We plan to release our annotated data upon paper
+acceptance.
+>>>>>>> 9217d0e650c738bf0d9a80541fa1521fcbd746a5
