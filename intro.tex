@@ -24,18 +24,18 @@ an event by switching focus to the most releavant person at each instant of the 
 Videos captured in sports arenas, market places or other outdoor areas
 typically contain multiple people interacting with each other.
 Typically most people are doing ``something'', but not all of them are involved in the main event.
-The main events in these videos are dominated by a smaller subset. For instance, a ``shot" in a game
+The main events is dominated by a smaller subset. For instance, a ``shot" in a game
 or ``shop-lifting" in a market is determined by one or two key people.
-In such settings, apart from recognizing the event it is also important
-to isolate the key actors. This is a significant challenge which
+Apart from recognizing the event it is also important
+to isolate these key actors. This is a significant challenge which
 differentiates multi-person videos from single-person videos.
 
-Identifying the people responsible for the event is an interesting task in its own right.
-It is also desirable to learn a model which does not require annotations for identifying these people during
-training. In this paper, we propose a method  to classify events by using
-a model that is able to ``attend'' to a subset of the key people.
-We  do this without ever explicitly telling the model who or where the
-key people are. 
+Identifying the people responsible for the event is an interesting task in its
+own right.  It is also desirable to learn a model which does not require
+annotations for identifying these people during training. In this paper, we
+propose a method  to classify events by using a model that is able to
+``attend'' to a subset of the key people.  We  do this without ever explicitly
+telling the model who or where the key people are. 
 
 Recently, several papers have proposed to use attention models for aligning
 elements from a fixed input to a fixed output.  For example,
@@ -52,7 +52,7 @@ time. Thus we are combining spatial and temporal attention.  Note that while
 the person detections vary from one frame to another, they can be associated
 across frames through tracking. We provide an RNN based representation for the
 tracks and the attention model is tasked with selecting from this
-representation.  We show that this results in improved event recognition
+representation. We show that this results in improved event recognition
 performance.
 
 In order to evaluate our method, we need a large number of videos illustraintg
