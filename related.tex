@@ -1,3 +1,14 @@
+
+\begin{figure*}[ht!]
+  \includegraphics[width=6.5 in]{images/dataset_figure_cropped.pdf}
+  \caption{Our dataset contains timestamp annotations for 11 basketball events
+    in long untrimmed videos. Additionally, we also provide bounding boxes for player
+    detections obtained from a multibox model trained on a subset of training
+  video frames.}
+\end{figure*}
+
+
+
 \section{Related Work}
 
 
@@ -68,7 +79,6 @@ different phases of the event.  Further, in our setting the attended set of
 player detections changes between frames. This leads to interesting
 model choices, which we will discuss in Section~\ref{sec:methods}.
 
-<<<<<<< HEAD
 \noindent \textbf{Action recognition datasets}
 Action recognition in videos has eveolved with the introduction of more
 sophisticated datasets starting from smaller KTH \cite{KTH}, HMDB \cite{HMDB}
@@ -84,7 +94,7 @@ hand, publicly available multi-person activity datasets \cite{Choi_ICCV09,Ryoo_1
 to a very small number of videos.  One of the contributions of our work is 
 a multi-player basketball dataset with dense temporal event annotations in
 long videos. We provide more details in the next section.
-=======
+
 \noindent \textbf{Person detection and tracking}. There is a very
 large literature on person detection and tracking. Here we just
 mention a few key papers.
@@ -94,4 +104,3 @@ For person tracking, we use the KLT tracker from
 \cite{Veenman_PAMI2001}.
 There is also work on player identification (e.g., \cite{Lu2013}), but
 in this work, we do not attempt to distinguish individual players.
->>>>>>> 9217d0e650c738bf0d9a80541fa1521fcbd746a5
