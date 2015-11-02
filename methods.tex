@@ -27,10 +27,10 @@ and simultaneously identifying the key players.
 \subsection{Feature extraction}
 
 Each video-frame is represented by a feature vector $f_t$, which is the activation
-of the last fully connected layer of Inception7 network
+of the last fully connected layer of the Inception7 network
 \cite{Ioffe_arxiv15,Inception7}.  In addition, we compute spatially localized features
-for each person in the frame. In particular,
-$p_{ti}$ contains both appearance and spatial information for the $i$'th
+for each person in the frame. In particular, we compute a feature vector
+$p_{ti}$ which contains both appearance and spatial information for the $i$'th
 player bounding box in frame $t$. Similar to the RCNN object detector\cite{},
 the appearance features were extracted by feeding
 the cropped and resized player region from the frame through the Inception7 network and
@@ -77,7 +77,7 @@ setting.
 
 First, although we have different detections in each frame, they
 can be connected across the frames through an object tracking
-method. This could potentially lead to better feature representation of the
+method. This could lead to better feature representation of the
 players.
 
 Second, player attention depends on the state of the event and needs to evolve
@@ -97,7 +97,9 @@ belonging to the same player into tracks using a standard
 tracking method. We use a KLT tracker combined with
 bipartite graph matching \cite{} to perform the data association.
 
-We use a separate BLSTM to learn a better context based
+The player tracks can now be used to incorporate context
+from adjacent frames while computing their representation.
+We do this through a separate BLSTM which learns a latent
 representation for each player at a given time-step.
 The latent representation of player $i$ in frame $t$ is
 given by the hidden state
@@ -106,7 +108,10 @@ $h_{ti}^p$ of the BLSTM across the player-track:
   h_{ti}^p = \mbox{BLSTM}_{track}(h_{t-1,i}^p, h_{t+1,i}^p, p_{ti}).
 \]
 
-To compute $a_t$, we take a convex combination of the player features:
+At every time-step we want the most releavant player at that
+instant to be chosen. We achieve this by computing
+$a_t$ as a convex combination of the player representations
+at that time-step:
 \begin{eqnarray} 
 \label{eq:track}
   a_t^{track} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{track} p_{ti} 

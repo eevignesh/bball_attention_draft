@@ -6,20 +6,20 @@
 \small
  \begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
   \hline
-Event & IDT\cite{Wang_CVPR11} & IDT\cite{Wang_CVPR11} player & C3D \cite{Tran_arxiv14} & LRCN \cite{Donahue_arxiv14} & MIL\cite{} & Only player & Avg. player & Our no track & Our track \\ \hline \hline
+Event & IDT\cite{Wang_CVPR11} & IDT\cite{Wang_CVPR11} player & C3D \cite{Tran_arxiv14} & MIL\cite{Andrews_NIPS02} &  LRCN \cite{Donahue_arxiv14} &Only player & Avg. player & Our no track & Our track \\ \hline \hline
 
-3-point succ.    & 0.370 & 0.428 & 0.117 & 0.462 &  & 0.469 & 0.545 & 0.583 & 0.600 \\
-3-point fail.    & 0.501 &  0.481& 0.282 & 0.564 &  & 0.614 & 0.702 & 0.668 & 0.738 \\
-fr-throw succ. & 0.778 &  0.703& 0.642 & 0.876 &  & 0.885 & 0.809 & 0.892 & 0.882 \\
-fr-throw fail. & 0.365 &  0.623& 0.319 & 0.584 &  & 0.700 & 0.641 & 0.671 & 0.516 \\
-layup succ.      & 0.283 & 0.300 & 0.195 & 0.463 &  & 0.416 & 0.472 & 0.489 & 0.500 \\
-layup fail.      & 0.278 &0.311  & 0.185 & 0.386 &  & 0.305 & 0.388 & 0.426 & 0.445 \\
-2-point succ.    & 0.136 &  0.233 & 0.078 & 0.257 &  & 0.228 & 0.255 & 0.281 & 0.341 \\
-2-point fail.    & 0.303 &  0.285 & 0.254 & 0.378 &  & 0.391 & 0.473 & 0.442 & 0.471 \\
-sl. dunk succ.  & 0.197 &  0.010 & 0.047 & 0.285 &  & 0.107 & 0.186 & 0.210 & 0.291 \\
-sl. dunk fail.  & 0.004 &  0.171& 0.004 & 0.027 &  & 0.006 & 0.010 & 0.006 & 0.004 \\
-steal            & 0.555 &  0.473& 0.303 & 0.876 &  & 0.854 & 0.894 & 0.886 & 0.893 \\ \hline \hline
-Mean             & 0.343 &  0.365 & 0.221 & 0.469 &  & 0.452 & 0.489 & 0.505 & \textbf{0.516} \\ \hline
+  3-point succ.    & 0.370 & 0.428 & 0.117 & 0.237 & 0.462   & 0.469 & 0.545 & 0.583 & \textbf{0.600} \\
+  3-point fail.    & 0.501 &  0.481& 0.282 & 0.335 & 0.564   & 0.614 & 0.702 & 0.668 & \textbf{0.738} \\
+  fr-throw succ. & 0.778 &  0.703& 0.642   & 0.597 & 0.876   & 0.885 & 0.809 & \textbf{0.892} & 0.882 \\
+  fr-throw fail. & 0.365 &  0.623& 0.319   & 0.318 & 0.584    & \textbf{0.700} & 0.641 & 0.671 & 0.516 \\
+  layup succ.      & 0.283 & 0.300 & 0.195 & 0.257 & 0.463   & 0.416 & 0.472 & 0.489 & \textbf{0.500} \\
+  layup fail.      & 0.278 &0.311  & 0.185 & 0.247 & 0.386   & 0.305 & 0.388 & 0.426 & \textbf{0.445} \\
+  2-point succ.    & 0.136 &  0.233 & 0.078& 0.224 & 0.257    & 0.228 & 0.255 & 0.281 & \textbf{0.341} \\
+  2-point fail.    & 0.303 &  0.285 & 0.254& 0.299 & 0.378   & 0.391 & \textbf{0.473} & 0.442 & 0.471 \\
+  sl. dunk succ.  & 0.197 &  0.171 & 0.047 & 0.112 & 0.285   & 0.107 & 0.186 & 0.210 & \textbf{0.291} \\
+  sl. dunk fail.  & 0.004 &  0.010 & 0.004 & 0.005 & \textbf{0.027} & 0.006 & 0.010 & 0.006 & 0.004 \\
+  steal            & 0.555 &  0.473& 0.303 & 0.843 & 0.876 &  0.843 & \textbf{0.894} & 0.886 & 0.893 \\ \hline \hline
+Mean             & 0.343 &  0.365 & 0.221  & 0.316 & 0.469 & 0.452 & 0.489 & 0.505 & \textbf{0.516} \\ \hline
   \end{tabular}
 \end{center}
   \caption{Mean average precision for event {\em classification} given
@@ -71,7 +71,7 @@ below:
   to LRCN. The only difference is the use of BLSTM in place of LSTM. We found this to improve
   performance.
 
-  \item \emph{MIL \cite{}} Since each frame can be seen as a bag of player features, we used the
+  \item \emph{MIL \cite{Andrews_NIPS02}} Since each frame can be seen as a bag of player features, we used the
   classical MIL model. 
 
   \item \emph{Only player} We only use player features without frame-level
@@ -166,11 +166,28 @@ the ball is highlighted by attention.}
 \begin{center}
    \includegraphics[width=1.0\linewidth]{images/visual_examples_v2.pdf}
 \end{center}
-   \caption{Visualization of our attention scores at the begining of different events.
-Each row of the event corresponds to a different video. The position of the ball is highlighted in yellow.}
+   \caption{Visualization of our attention scores at the begining of different events
+     for the tracking free model.
+Each row of the event corresponds to a different video.
+The player being attended is highglighted in blue.
+The position of the ball is highlighted in yellow.}
 \label{fig:visual_attention}
 \end{figure*}
 % ---------------------------------------------------------------------------------
+
+% -------- Heat Map for youtube videos
+\begin{figure}[t!]
+\begin{center}
+   \includegraphics[width=1.0\linewidth]{images/track_spec_output.pdf}
+\end{center}
+   \caption{Visualization of attention scores at the begining of free-throw success
+     for the attention model with tracks. In this setting, the model consistently
+     attends to the defender at a particular spot.
+   The player being attended is highglighted in blue, and ball is shown in yellow.}
+\label{fig:visual_attention_trackspec}
+\end{figure}
+% ---------------------------------------------------------------------------------
+
 
 
 

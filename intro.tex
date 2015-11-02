@@ -12,7 +12,9 @@ and dataset for this specific setting.
 \begin{center}
   \includegraphics[width=3.5 in]{images/pull_figure_v2_cropped.pdf}
 \end{center}
-\caption{To recognize multi-person events, it is necessary to observe the right
+\caption{\TODO{Change figure to show the same video with uniteresting people highighted
+  and show how that makes the problem difficult. But when we look at the right people
+it is automatically easier.}To recognize multi-person events, it is necessary to observe the right
 person at the right instant. Here, we can identify the
 event to be a ``2-pointer" by observing the shooter at the time of the shot.
 Similarly, we can declare the shot to be ``successful" by looking at the
@@ -32,12 +34,13 @@ differentiates multi-person videos from single-person videos.
 
 Identifying the people responsible for the event is an interesting task in its
 own right.  It is also desirable to learn a model which does not require
-annotations for identifying these people during training. In this paper, we
-propose a method  to classify events by using a model that is able to
-``attend'' to a subset of the key people.  We  do this without ever explicitly
-telling the model who or where the key people are. 
+annotations for identifying these people during training. \VIGNESH{ This can
+also be viewed as a problem of weakly supervised key player identification.} In
+this paper, we propose a method  to classify events by using a model that is
+able to ``attend'' to a subset of the key people.  We  do this without ever
+explicitly telling the model who or where the key people are.
 
-Recently, several papers have proposed to use attention models for aligning
+Recently, several papers have proposed to use ``attention" models for aligning
 elements from a fixed input to a fixed output.  For example,
 \cite{Bahdnau_arxiv14} translate sentences in one language to another language,
 attending to different words in the input; \cite{Xu_arxiv15} generate an image-caption,
@@ -45,6 +48,7 @@ attending to different regions in the image; and
 \cite{Yao_arxiv15} generate a video-caption, attending to different
 frames within the video.  In these settings, the input sequence remains fixed
 at all times and the model chooses from this fixed input at each instant.
+\JONATHAN{Fix discontinuitiy here.}
 
 In our work, we use attention to decide which of several people is most
 relevant to the action being performed; this attention mask can change over
