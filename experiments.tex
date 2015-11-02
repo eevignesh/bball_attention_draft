@@ -175,21 +175,23 @@ The position of the ball is highlighted in yellow.}
 \end{figure*}
 % ---------------------------------------------------------------------------------
 
+
+
 % -------- Heat Map for youtube videos
-\begin{figure}[t!]
+\begin{figure*}[t!]
 \begin{center}
-   \includegraphics[width=1.0\linewidth]{images/track_spec_output.pdf}
+%  \includegraphics[width=7 in]{images/attention_heatmap_full.pdf}
+  \includegraphics[width=7in]{images/heatmap_figure_v2_cropped.pdf}
 \end{center}
-   \caption{Visualization of attention scores at the begining of free-throw success
-     for the attention model with tracks. In this setting, the model consistently
-     attends to the defender at a particular spot.
-   The player being attended is highglighted in blue, and ball is shown in yellow.}
-\label{fig:visual_attention_trackspec}
-\end{figure}
+   \caption{We show the distribution of the attention over the basketball court
+     for different events. We used an affine transform to transform the
+     attended player's position to a cannonical frame for visualization.
+     Interestingly, the attended court positions are the typical spots from
+     which a player would make a shot for the corresponding event.
+   }
+\label{fig:att_heatmap}
+\end{figure*}
 % ---------------------------------------------------------------------------------
-
-
-
 
 \begin{table}[ht!]
 \begin{center}
@@ -230,17 +232,6 @@ alone is capable of localizing the player making the shot. This could be
 a useful cue for providing more detailed event descriptions
 including the identity and position of the shooter as well.
 
-Another interesting observation
-%from Tab.~\ref{tab:attention_res}
-is that the
-attention scores for the tracking based model are less selective in focusing on
-the shooter.  We observed that the tracking model is often reluctant to switch
-attention between frames and tends to focus on a single player throughout the
-event. This biases the model towards players who are present throughout the
-event. For instance, in free-throws Fig.~\ref{fig:track_spec_att} we see that
-the model always attends to the defender at a specific position, who is visible
-throughout the entire event unlike the shooter.
-
 In addition to the above quantitative evaluation, we wanted to
 visualize the attention masks visually.
 In order to make results comparable across frames, 
@@ -251,30 +242,31 @@ of the attended players with respect to the court. It is interesting to note tha
 our model consistenly focuses under the basket for a layup, at the free-throw
 line for free-throws and outside the 3-point ring for 3-pointers.
 
-\eat{
-Since basketball shots are often classified based on the position of the
-shooter with respect to the court, we analyze this in
-Fig.~\ref{fig:att_heatmap}.  We annotated specific points on the courts and
-aligned all the attended boxes for an event to one cannonical image. We have
-plotted the resulting heatmap showing the distribution in position of the
-attended player with respect to the court. It is interesting to note that
-our model consistenly focuses under the basket for a layup, at the free-throw
-line for free-throws and outside the 3-point ring for 3-pointers.
-}
-
+Another interesting observation
+%from Tab.~\ref{tab:attention_res}
+is that the
+attention scores for the tracking based model are less selective in focusing on
+the shooter.  We observed that the tracking model is often reluctant to switch
+attention between frames and tends to focus on a single player throughout the
+event. This biases the model towards players who are present throughout the
+event. For instance, in free-throws Fig.~\ref{fig:visual_attention_trackspec} we see that
+the model always attends to the defender at a specific position, who is visible
+throughout the entire event unlike the shooter.
 
 % -------- Heat Map for youtube videos
-\begin{figure*}[t!]
+\begin{figure}[t!]
 \begin{center}
-%  \includegraphics[width=7 in]{images/attention_heatmap_full.pdf}
-  \includegraphics[width=7in]{images/heatmap_figure_cropped.pdf}
+   \includegraphics[width=1.0\linewidth]{images/track_spec_output.pdf}
 \end{center}
-   \caption{We show the distribution of the attention over the basketball court
-     for different events. We used an affine transform to transform the
-     attended player's position to a cannonical frame for visualization.
-     Interestingly, the attended court positions are the typical spots from
-     which a player would make a shot for the corresponding event.
-   }
-\label{fig:att_heatmap}
-\end{figure*}
+   \caption{Visualization of attention scores at the begining of free-throw success
+     for the attention model with tracks. In this setting, the model consistently
+     attends to the defender at a particular spot as seen from the heatmap
+     showing the distribution of the attended player's position.}
+\label{fig:visual_attention_trackspec}
+\end{figure}
 % ---------------------------------------------------------------------------------
+
+
+
+
+
