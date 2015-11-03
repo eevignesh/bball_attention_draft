@@ -100,7 +100,7 @@ In this section, we evaluate the ability of methods to temporally localize
 events in untrimmed videos.  We use a sliding window approach, where we slide a
 $4$ second window through all the basketball videos and try to classify the
 window into a negative class or one of the 11 event classes. We use a stride
-length of $2$ seconds.  We treat all windows which do not overalp more than $1$
+length of $2$ seconds.  We treat all windows which do not overlap more than $1$
 sec with any of the $11$ annotated events as negatives. We use the same setting
 for training, test and validation.  This leads to $90200$ negative examples
 across all the videos.  We compare with the same baselines as before. However,
@@ -154,7 +154,7 @@ the attention scores themselves carry valuable information.
 We observed that the attention scores represented a 
 consistent meaning across multiple videos in our dataset.
 More concretely, our model often ``attends" to the person shooting the
-ball at the begining of an event. We can see several visual examples
+ball at the beginning of an event. We can see several visual examples
 in Fig.~\ref{fig:visual_attention}, where the person shooting
 the ball is highlighted by attention.}
 
@@ -164,10 +164,10 @@ the ball is highlighted by attention.}
 \begin{center}
    \includegraphics[width=1.0\linewidth]{images/visual_examples_v2.pdf}
 \end{center}
-   \caption{Visualization of our attention scores at the begining of different events
+   \caption{Visualization of our attention scores at the beginning of different events
      for the tracking free model.
 Each row of the event corresponds to a different video.
-The player being attended is highglighted in blue.
+The player being attended is highlighted in blue.
 The position of the ball is highlighted in yellow.}
 \label{fig:visual_attention}
 \end{figure*}
@@ -183,7 +183,7 @@ The position of the ball is highlighted in yellow.}
 \end{center}
    \caption{We show the distribution of the attention over the basketball court
      for different events. We used an affine transform to transform the
-     attended player's position to a cannonical frame for visualization.
+     attended player's position to a canonical frame for visualization.
      Interestingly, the attended court positions are the typical spots from
      which a player would make a shot for the corresponding event.
    }
@@ -234,10 +234,10 @@ In addition to the above quantitative evaluation, we wanted to
 visualize the attention masks visually.
 In order to make results comparable across frames, 
 we annotated 5 points on the court and
-aligned all the attended boxes for an event to one cannonical image. 
+aligned all the attended boxes for an event to one canonical image. 
 Fig.~\ref{fig:att_heatmap} shows a heatmap  showing the spatial distributions
 of the attended players with respect to the court. It is interesting to note that
-our model consistenly focuses under the basket for a layup, at the free-throw
+our model consistently focuses under the basket for a layup, at the free-throw
 line for free-throws and outside the 3-point ring for 3-pointers.
 
 Another interesting observation
@@ -256,7 +256,7 @@ throughout the entire event unlike the shooter.
 \begin{center}
    \includegraphics[width=1.0\linewidth]{images/track_spec_output.pdf}
 \end{center}
-   \caption{Visualization of attention scores at the begining of free-throw success
+   \caption{Visualization of attention scores at the beginning of free-throw success
      for the attention model with tracks. In this setting, the model consistently
      attends to the defender at a particular spot as seen from the heatmap
      showing the distribution of the attended player's position.}

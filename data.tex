@@ -50,7 +50,7 @@ The videos are typically $1.5$ hours long.
 We manually identified $11$ key event types
 listed in Tab.~\ref{tab:data_dist}.
 In particular, we considered 
-5 types of shots, each of which could be succesful or failed,
+5 types of shots, each of which could be successful or failed,
 plus a steal event. 
 
 Next we setup an Amazon Mechanical Turk task, where the
@@ -89,13 +89,12 @@ such long video sequences.
 
 \noindent \textbf{Player detections}
 We also used AMT to annotate the bounding boxes of all the players in a
-subset \KEVIN{HOW BIG?} of frames from the training videos.
+subset of 9000 frames from the training videos.
 We then trained a Multibox detector \cite{Szegedy_arxiv14}
 with these annotatoins, and ran the trained detector on all the videos in our dataset.
 We retained all detections above a confidence of 0.5 per frame;
 this resulted in person detections as listed in Tab.~\ref{tab:data_dist}.
 The multibox model achieves an average overlap of $0.7$ at a recall of $0.8$
 with ground-truth bounding boxes in the validation videos.
- \TODO{Get exact numbers from John.}
 These detected player bounding boxes from the
 multi-box model will also be made available with the dataset.

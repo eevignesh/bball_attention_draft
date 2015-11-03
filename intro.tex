@@ -47,19 +47,18 @@ attending to different regions in the image; and
 frames within the video.
 
 \eat{In these settings, the input sequence remains fixed
-at all times and the model chooses from this fixed input at each instant.
-\JONATHAN{Fix discontinuitiy here.}}
+at all times and the model chooses from this fixed input at each instant.}
 
 In our work, we use attention to decide which of several people is most
 relevant to the action being performed; this attention mask can change over
 time. Thus we are combining spatial and temporal attention.  Note that while
 the person detections vary from one frame to another, they can be associated
 across frames through tracking. We provide an RNN based representation for the
-tracks and the attention model is tasked with selecting the most releavant
+tracks and the attention model is tasked with selecting the most relevant
 track in each frame. We show that this results in improved event recognition
 performance.
 
-In order to evaluate our method, we need a large number of videos illustraintg
+In order to evaluate our method, we need a large number of videos illustrating
 events involving multiple people. Most prior activity and event
 recognition datasets focus on actions involving just one or two people.
 Multi-person datasets like \cite{Ryoo_ICCV09,VIRAT,Choi_ICCV09} are usually restricted to fewer videos.

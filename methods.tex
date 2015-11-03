@@ -3,10 +3,10 @@
 
 All events in a team sport are performed in the same scene by the same set
 of players. The only basis for differentiating these events is the action
-pefromed by a small subset of people at a given time.  For instance, a
+performed by a small subset of people at a given time.  For instance, a
 ``steal" event in basketball is completely defined by the action of the player attempting to
 pass the ball and the player stealing from him.  To understand such an event,
-it is sufficient to observe only these players pariticipating in the event.
+it is sufficient to observe only these players participating in the event.
 
 This motivates us to build a model which can reason about an event by focusing
 on specific people during the different phases of the event.
@@ -19,7 +19,7 @@ and simultaneously identifying the key players.
 \end{center}
    \caption{Our attention model where each player track is represented by the
      corresponding BLSTM. The variables in the model are explained in the
-     methods section.  BLSTM stands for ``bidirection long short term memory''.
+     methods section.  BLSTM stands for ``bidirectional long short term memory''.
 }
 \label{fig:model}
 \end{figure}
@@ -89,7 +89,7 @@ Second, player attention depends on the state of the event and needs to evolve
 with the event.  For instance, during the start of a ``free-throw" it is
 important to attend to the player making the shot. However, towards the end of
 the event the success or failure of the shot can be judged by observing the
-person in posession of the ball.
+person in possession of the ball.
 
 With these issues in mind, we first present our model which uses player tracks
 and learns a BLSTM based representation for each player track. Next, we also
@@ -97,7 +97,7 @@ present a simple tracking-free baseline model.
 
 \noindent \textbf{Attention model with tracking}
 
-We first associate the detecitons
+We first associate the detections
 belonging to the same player into tracks using a standard
 tracking method. We use a KLT tracker combined with
 bipartite graph matching \cite{} to perform the data association.
@@ -113,7 +113,7 @@ $h_{ti}^p$ of the BLSTM across the player-track:
   h_{ti}^p = \mbox{BLSTM}_{track}(h_{t-1,i}^p, h_{t+1,i}^p, p_{ti}).
 \]
 
-At every time-step we want the most releavant player at that
+At every time-step we want the most relevant player at that
 instant to be chosen. We achieve this by computing
 $a_t$ as a convex combination of the player representations
 at that time-step:
@@ -130,11 +130,11 @@ This model is illustrated in Figure~\ref{fig:model}.
 Later, we show that this method achieves better
 performance at event classification and detection compared to a
 tracking-free model. However, it could result in slightly worse ``key player"
-identifcation due to tracking errors.
+identification due to tracking errors.
 
 \noindent \textbf{Attention model without tracking}
 Here, we treat the detections in each frame to be independent from other
-frames.  This alows the model to be more flexible in switching attention
+frames.  This allows the model to be more flexible in switching attention
 between players as the event progresses.  As we later observe empirically, this
 leads to better interpretability.  Also, the model does not suffer from
 tracking errors.
@@ -147,6 +147,6 @@ We then compute the attention based player feature as shown below:
   \gamma_{ti}^{notrack} & = & \text{softmax} \left(\phi\left(h^f_t, p_{ti}, h^e_{t-1}\right); \tau\right),
 \end{eqnarray}
 
-Note that this is similaro to the trakcing based attention equations except for
+Note that this is similar to the tracking based attention equations except for
 the direct use of the player detection feature $p_{ti}$ in place of the
 BLSTM representation $h_{ti}^p$.
