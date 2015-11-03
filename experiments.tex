@@ -35,18 +35,16 @@ attention
 
 \subsection{Implementation details}
 
- We used a hidden state dimension of $256$ for all the LSTM and
-BLSTM RNNs, an embedding layer with ReLU non-linearity and $256$ dimension for
-embedding the player features and frame features before feeding to the RNNs.
-We used $32 \times 32$ bins with spatial pyramid pooling for the player appearance
-feature.
+We used a hidden state dimension of $256$ for all the LSTM and BLSTM RNNs, an
+embedding layer with ReLU non-linearity and $256$ dimension for embedding the
+player features and frame features before feeding to the RNNs.  We used $32
+\times 32$ bins with spatial pyramid pooling for the player appearance feature.
 All the event videos clips were four seconds long and subsampled to 6fps.  The
 $\tau$ value was set to $0.25$ for the attention softmax weighting. We used a
 batch size of $128$, learning rate of $0.005$ which was reduced by a factor of
-$0.1$ every $10000$ iterations with RMSProp\cite{RMSProp}. The models were trained on
-a cluster of $20$ GPUs for $100k$ iterations over one day.
-The hyperparameters were chosen by cross-validating on the
-validation set.
+$0.1$ every $10000$ iterations with RMSProp\cite{RMSProp}. The models were
+trained on a cluster of $20$ GPUs for $100k$ iterations over one day.  The
+hyperparameters were chosen by cross-validating on the validation set.
 
 \subsection{Event classification}
 
@@ -74,15 +72,15 @@ below:
   \item \emph{MIL \cite{Andrews_NIPS02}} Since each frame can be seen as a bag of player features, we used the
   classical MIL model. 
 
-  \item \emph{Only player} We only use player features without frame-level
-  features.
+\item \emph{Only player} We only use our player features from Sec.~\ref{sec:feature_extraction} in our model
+  without frame-level features.
  
   \item \emph{Avg. player} We combine the player features by simple averaging, without
 using  attention.
 
-  \item \emph{Attn. no track} Our attention model without tracks.
+  \item \emph{Attn. no track} Our attention model without tracks (Eq.~\ref{eq:notrack}).
 
-  \item \emph{Attn. with track} Our attention model with tracking.
+  \item \emph{Attn. with track} Our attention model with tracking (Eq.~\ref{eq:track}).
 \end{itemize}
 
 The mean average precision (mAP)
@@ -98,15 +96,15 @@ such as ``slam dunk fail'' for which we have very little data.
 
 \subsection{Event detection}
 
-In this section, we evaluate the ability of methods to temporally localize events in untrimmed videos.
-We use a sliding window approach, where we slide a $4$ second window
-through all the basketball videos and try to classify the window into a negative
-class or one of the 11 event classes. We use a stride length of $2$ seconds.
-We treat all windows which do not overalp more than $1$ sec with any of the $11$ annotated
-events as negatives. We use the same setting for training, test and validation.
-This leads to $90200$ negative examples across all the videos.
- We compare with the same baselines as before. However, we were unable
- to train the MIL model due to computational limitations.
+In this section, we evaluate the ability of methods to temporally localize
+events in untrimmed videos.  We use a sliding window approach, where we slide a
+$4$ second window through all the basketball videos and try to classify the
+window into a negative class or one of the 11 event classes. We use a stride
+length of $2$ seconds.  We treat all windows which do not overalp more than $1$
+sec with any of the $11$ annotated events as negatives. We use the same setting
+for training, test and validation.  This leads to $90200$ negative examples
+across all the videos.  We compare with the same baselines as before. However,
+we were unable to train the MIL model due to computational limitations.
 
 \begin{table*}[ht!]
 \begin{center}
@@ -114,18 +112,18 @@ This leads to $90200$ negative examples across all the videos.
  \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
   \hline
 Event & IDT\cite{Wang_CVPR11} & IDT player\cite{Wang_CVPR11} & C3D \cite{Tran_arxiv14} & LRCN \cite{Donahue_arxiv14} & Only player & Avg. player & Our no track & Our track \\ \hline \hline
-3-point succ.    &  &  &  & 0.505 & 0.526 & 0.521 & 0.556 & 0.600 \\
-3-point fail.    &  &  &  & 0.230 & 0.251 & 0.268 & 0.263 & 0.239 \\
-free-throw succ. &  &  &  & 0.741 & 0.777 & 0.811 & 0.788 & 0.810 \\
-free-throw fail. &  &  &  & 0.434 & 0.470 & 0.444 & 0.468 & 0.405 \\
-layup succ.      &  &  &  & 0.187 & 0.142 & 0.139 & 0.208 & 0.208 \\
-layup fail.      &  &  &  & 0.492 & 0.402 & 0.489 & 0.494 & 0.512 \\
-2-point succ.    &  &  &  & 0.544 & 0.578 & 0.684 & 0.619 & 0.674 \\
-2-point fail.    &  &  &  & 0.352 & 0.371 & 0.417 & 0.366 & 0.400 \\
-slam dunk succ.  &  &  &  & 0.428 & 0.566 & 0.457 & 0.576 & 0.555 \\
-slam dunk fail.  &  &  &  & 0.122 & 0.059 & 0.009 & 0.005 & 0.045 \\
-steal            &  &  &  & 0.359 & 0.348 & 0.313 & 0.340 & 0.339 \\ \hline \hline
-Mean             &  &  &  & 0.400 & 0.408 & 0.414 & 0.426 & 0.435 \\ \hline
+3-point succ.    & 0.194  & 0.203 &  & 0.230 & 0.251 & \textbf{0.268} & 0.263 & 0.239 \\
+3-point fail.    & 0.393  & 0.376 &  & 0.505 & 0.526 & 0.521 & 0.556 & \textbf{0.600} \\
+free-throw succ. & 0.585  & 0.621 &  & 0.741 & 0.777 & \textbf{0.811} & 0.788 & 0.810 \\
+free-throw fail. & 0.231  & 0.277 &  & 0.434 & \textbf{0.470} & 0.444 & 0.468 & 0.405 \\
+layup succ.      & 0.258  & 0.290 &  & 0.492 & 0.402 & 0.489 & 0.494 & \textbf{0.512} \\
+layup fail.      & 0.141  & 0.200 &  & 0.187 & 0.142 & 0.139 & 0.207 & \textbf{0.208} \\
+2-point succ.    & 0.161  & 0.170 &  & 0.352 & 0.371 & \textbf{0.417} & 0.366 & 0.400 \\
+2-point fail.    & 0.358  & 0.339 &  & 0.544 & 0.578 & \textbf{0.684} & 0.619 & 0.674 \\
+  slam dunk succ.& 0.137  & 0.275 &  & 0.428 & 0.566 & 0.457 & 0.576 & \textbf{0.555} \\
+slam dunk fail.  & 0.007  & 0.006 &  & \textbf{0.122} & 0.059 & 0.009 & 0.005 & 0.045 \\
+steal            & 0.242  & 0.255 &  & \textbf{0.359} & 0.348 & 0.313 & 0.340 & 0.339 \\ \hline \hline
+Mean             & 0.246  & 0.273 &  & 0.400 & 0.408 & 0.414 & 0.426 & \textbf{0.435} \\ \hline
   \end{tabular}
 \end{center}
   \caption{Mean average precision for event {\em detection} given

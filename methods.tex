@@ -25,18 +25,22 @@ and simultaneously identifying the key players.
 \end{figure}
 
 \subsection{Feature extraction}
-
-Each video-frame is represented by a feature vector $f_t$, which is the activation
-of the last fully connected layer of the Inception7 network
-\cite{Ioffe_arxiv15,Inception7}.  In addition, we compute spatially localized features
-for each person in the frame. In particular, we compute a feature vector
-$p_{ti}$ which contains both appearance and spatial information for the $i$'th
-player bounding box in frame $t$. Similar to the RCNN object detector\cite{},
-the appearance features were extracted by feeding
-the cropped and resized player region from the frame through the Inception7 network and
+\label{sec:feature_extraction}
+Each video-frame is represented by a feature vector $f_t$, which is the
+activation of the last fully connected layer of the Inception7 network
+\cite{Ioffe_arxiv15,Inception7}.  In addition, we compute spatially localized
+features for each person in the frame. In particular, we compute a feature
+vector $p_{ti}$ which contains both appearance and spatial information for the
+$i$'th player bounding box in frame $t$.
+Similar to the RCNN object
+detector\cite{}, the appearance features were extracted by feeding the cropped
+and resized player region from the frame through the Inception7 network and
 spatially pooling the response from a lower layer. The spatial feature
-corresponds to a 32 x 32 spatial histogram, combined with a spatial
-pyramid, to indicate the bounding box location at multiple scales.
+corresponds to a 32 x 32 spatial histogram, combined with a spatial pyramid, to
+indicate the bounding box location at multiple scales.
+While we have only used spatial CNN representations in our
+work, these features can also be easily extended with flow information as
+suggested in \cite{Simonyan_NIPS14}.
 
 \subsection{Event classification}
 
@@ -56,9 +60,10 @@ for the full equations.
 
 Next we use use a unidirectional LSTM to represent the state of the
 event at time $t$:
-\[
+\begin{equation}
+  \label{eq:event_lstm}
 h_t^e = \mbox{LSTM}(h_{t-1}^e, h_t^f, a_t)
-\]
+\end{equation}
 where $a_t$ is a feature vector derived from the players, as we
 describe below.
 From this, we can predict the class label for the clip using $w_k^T
@@ -114,11 +119,12 @@ $a_t$ as a convex combination of the player representations
 at that time-step:
 \begin{eqnarray} 
 \label{eq:track}
-  a_t^{track} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{track} p_{ti} 
-\\ \nonumber
+  a_t^{track} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{track} h_{ti}^p \\ \nonumber
   \gamma_{ti}^{track} & = & \text{softmax} \left(\phi\left(h^f_t, h^p_{ti}, h^e_{t-1}\right); \tau\right),
 \end{eqnarray}where $N_t$ is the number of detections in frame $t$, and $\phi()$ is a 
 multi layer perceptron, similar to \cite{Bahdnau_arxiv14}. $\tau$ is the softmax temperature parameter.
+This attended player representation is input to the
+unidirectional event recognition LSTM in Eq.~\ref{eq:event_lstm}.
 
 This model is illustrated in Figure~\ref{fig:model}.
 Later, we show that this method achieves better
@@ -136,7 +142,11 @@ tracking errors.
 We then compute the attention based player feature as shown below:
 \begin{eqnarray} 
 \label{eq:notrack}
-  a_t^{notrack} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{notrack} p_{ti} 
+  a_t^{notrack} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{notrack} p_{ti}
 \\ \nonumber
   \gamma_{ti}^{notrack} & = & \text{softmax} \left(\phi\left(h^f_t, p_{ti}, h^e_{t-1}\right); \tau\right),
 \end{eqnarray}
+
+Note that this is similaro to the trakcing based attention equations except for
+the direct use of the player detection feature $p_{ti}$ in place of the
+BLSTM representation $h_{ti}^p$.

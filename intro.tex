@@ -1,12 +1,12 @@
 \section{Introduction}
 
 Event recognition and detection in videos has hugely benefited from the
-introduction of recent large-scale datasets \cite{THUMOS,UCF101,Karpathy_CVPR14,MED11} and models.
-However, this is mainly confined to the domain of single-person actions
-where the videos contain one actor performing a primary activity.
-Another equally important problem is event recognition in
-videos with multiple people. In our work, we present a new model
-and dataset for this specific setting.
+introduction of recent large-scale datasets
+\cite{THUMOS,UCF101,Karpathy_CVPR14,MED11} and models.  However, this is mainly
+confined to the domain of single-person actions where the videos contain one
+actor performing a primary activity.  Another equally important problem is
+event recognition in videos with multiple people. In our work, we present a new
+model and dataset for this specific setting.
 
 \begin{figure}[ht!]
 \begin{center}
@@ -24,18 +24,18 @@ to recognize the key players for event recognition.}
 Videos captured in sports arenas, market places or other outdoor areas
 typically contain multiple people interacting with each other.
 Typically most people are doing ``something'', but not all of them are involved in the main event.
-The main events is dominated by a smaller subset. For instance, a ``shot" in a game
-or ``shop-lifting" in a market is determined by one or two key people.
+The main event is dominated by a smaller subset. For instance, a ``shot" in a game
+\eat{or ``shop-lifting" in a market} is determined by one or two people.
 Apart from recognizing the event it is also important
 to isolate these key actors. This is a significant challenge which
 differentiates multi-person videos from single-person videos.
 
 Identifying the people responsible for the event is an interesting task in its
 own right.  It is also desirable to learn a model which does not require
-annotations for identifying these people during training. \VIGNESH{ This can
-also be viewed as a problem of weakly supervised key player identification.} In
+annotations for identifying these people during training. This can
+also be viewed as a problem of weakly supervised key person identification. In
 this paper, we propose a method  to classify events by using a model that is
-able to ``attend'' to a subset of the key people.  We  do this without ever
+able to ``attend'' to this subset key people.  We  do this without ever
 explicitly telling the model who or where the key people are.
 
 Recently, several papers have proposed to use ``attention" models for aligning
@@ -44,17 +44,19 @@ elements from a fixed input to a fixed output.  For example,
 attending to different words in the input; \cite{Xu_arxiv15} generate an image-caption,
 attending to different regions in the image; and
 \cite{Yao_arxiv15} generate a video-caption, attending to different
-frames within the video.  In these settings, the input sequence remains fixed
+frames within the video.
+
+\eat{In these settings, the input sequence remains fixed
 at all times and the model chooses from this fixed input at each instant.
-\JONATHAN{Fix discontinuitiy here.}
+\JONATHAN{Fix discontinuitiy here.}}
 
 In our work, we use attention to decide which of several people is most
 relevant to the action being performed; this attention mask can change over
 time. Thus we are combining spatial and temporal attention.  Note that while
 the person detections vary from one frame to another, they can be associated
 across frames through tracking. We provide an RNN based representation for the
-tracks and the attention model is tasked with selecting from this
-representation. We show that this results in improved event recognition
+tracks and the attention model is tasked with selecting the most releavant
+track in each frame. We show that this results in improved event recognition
 performance.
 
 In order to evaluate our method, we need a large number of videos illustraintg
