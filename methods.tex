@@ -6,7 +6,7 @@ of players. The only basis for differentiating these events is the action
 performed by a small subset of people at a given time.  For instance, a
 ``steal" event in basketball is completely defined by the action of the player attempting to
 pass the ball and the player stealing from him.  To understand such an event,
-it is sufficient to observe only these players participating in the event.
+it is sufficient to observe only the players participating in the event.
 
 This motivates us to build a model which can reason about an event by focusing
 on specific people during the different phases of the event.
@@ -19,7 +19,8 @@ and simultaneously identifying the key players.
 \end{center}
    \caption{Our attention model where each player track is represented by the
      corresponding BLSTM. The variables in the model are explained in the
-     methods section.  BLSTM stands for ``bidirectional long short term memory''.
+     methods section.  BLSTM stands for ``bidirectional long short term memory''. 
+     \Jon{add text labels to figure to denote ``player tracks'' and ``event state''}
 }
 \label{fig:model}
 \end{figure}
@@ -33,10 +34,10 @@ features for each person in the frame. In particular, we compute a feature
 vector $p_{ti}$ which contains both appearance and spatial information for the
 $i$'th player bounding box in frame $t$.
 Similar to the RCNN object
-detector\cite{}, the appearance features were extracted by feeding the cropped
+detector\cite{} \Jon{cite}, the appearance features were extracted by feeding the cropped
 and resized player region from the frame through the Inception7 network and
 spatially pooling the response from a lower layer. The spatial feature
-corresponds to a 32 x 32 spatial histogram, combined with a spatial pyramid, to
+corresponds to a $32\times 32$ spatial histogram, combined with a spatial pyramid, to
 indicate the bounding box location at multiple scales.
 While we have only used spatial CNN representations in our
 work, these features can also be easily extended with flow information as
@@ -50,7 +51,7 @@ effect of the way we construct our model, we will also be able to identify the
 key player in each frame.
 
 First we compute a global context feature for each frame, $h_t^f$, derived from
-a bidirectional LSTM applied to the frame-level feature as shown in Fig.~\ref{fig:system_fig}.
+a bidirectional LSTM applied to the frame-level feature as shown in Fig.~\ref{fig:system_fig}. \Jon{figure}
 This is a concatenation of the hidden states from the forward and reverse LSTM
 components of a BLSTM and can be compactly represented as:
 \[
@@ -58,25 +59,25 @@ components of a BLSTM and can be compactly represented as:
 \]Please refer to Graves et al. \cite{Graves_2013} or the supp. material
 for the full equations.
 
-Next we use use a unidirectional LSTM to represent the state of the
+Next we use  a unidirectional LSTM to represent the state of the
 event at time $t$:
 \begin{equation}
   \label{eq:event_lstm}
-h_t^e = \mbox{LSTM}(h_{t-1}^e, h_t^f, a_t)
+h_t^e = \mbox{LSTM}(h_{t-1}^e, h_t^f, a_t),
 \end{equation}
 where $a_t$ is a feature vector derived from the players, as we
 describe below.
 From this, we can predict the class label for the clip using $w_k^T
-h_t^e$. We measure the loss as follows:
+h_t^e$. We measure the squared-hinge loss as follows:
 \begin{equation}
-  L =   \frac{1}{2} \sum_{t=1}^T \sum_{k = 1}^K \max (0, 1 - y_k w_k^T h^e_t)^2
+  L =   \frac{1}{2} \sum_{t=1}^T \sum_{k = 1}^K \max (0, 1 - y_k w_k^T h^e_t)^2,
 \end{equation} 
 where $y_k$ is $1$ if the video belongs to class $k$,
-else it is $-1$, and the weight vector corresponding to
+and is $-1$ otherwise, and the weight vector corresponding to
 class $k$ is denoted by $w_k$.
 
 \subsection{Attention models}
-Unlike past attention models \cite{}, we need to attend to a different set of
+Unlike past attention models \cite{},\Jon{cite} we need to attend to a different set of
 features at each time-step. There are two key issues to address in this
 setting.
 
@@ -95,12 +96,11 @@ With these issues in mind, we first present our model which uses player tracks
 and learns a BLSTM based representation for each player track. Next, we also
 present a simple tracking-free baseline model.
 
-\noindent \textbf{Attention model with tracking}
-
+\noindent \textbf{Attention model with tracking.}
 We first associate the detections
 belonging to the same player into tracks using a standard
 tracking method. We use a KLT tracker combined with
-bipartite graph matching \cite{} to perform the data association.
+bipartite graph matching \cite{munkres1957algorithms} to perform the data association.
 
 The player tracks can now be used to incorporate context
 from adjacent frames while computing their representation.
@@ -119,7 +119,7 @@ $a_t$ as a convex combination of the player representations
 at that time-step:
 \begin{eqnarray} 
 \label{eq:track}
-  a_t^{track} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{track} h_{ti}^p \\ \nonumber
+  a_t^{track} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{track} h_{ti}^p, \\ \nonumber
   \gamma_{ti}^{track} & = & \text{softmax} \left(\phi\left(h^f_t, h^p_{ti}, h^e_{t-1}\right); \tau\right),
 \end{eqnarray}where $N_t$ is the number of detections in frame $t$, and $\phi()$ is a 
 multi layer perceptron, similar to \cite{Bahdnau_arxiv14}. $\tau$ is the softmax temperature parameter.
@@ -129,20 +129,20 @@ unidirectional event recognition LSTM in Eq.~\ref{eq:event_lstm}.
 This model is illustrated in Figure~\ref{fig:model}.
 Later, we show that this method achieves better
 performance at event classification and detection compared to a
-tracking-free model. However, it could result in slightly worse ``key player"
+tracking-free model (discussed next). However, it could result in slightly worse ``key player"
 identification due to tracking errors.
 
-\noindent \textbf{Attention model without tracking}
+\noindent \textbf{Attention model without tracking.}
 Here, we treat the detections in each frame to be independent from other
 frames.  This allows the model to be more flexible in switching attention
 between players as the event progresses.  As we later observe empirically, this
-leads to better interpretability.  Also, the model does not suffer from
+leads to better interpretability and the model does not suffer from
 tracking errors.
 
-We then compute the attention based player feature as shown below:
+We  compute the (no track) attention based player feature as shown below:
 \begin{eqnarray} 
 \label{eq:notrack}
-  a_t^{notrack} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{notrack} p_{ti}
+  a_t^{notrack} & = & \sum_{i=1}^{N_t} \gamma_{ti}^{notrack} p_{ti},
 \\ \nonumber
   \gamma_{ti}^{notrack} & = & \text{softmax} \left(\phi\left(h^f_t, p_{ti}, h^e_{t-1}\right); \tau\right),
 \end{eqnarray}

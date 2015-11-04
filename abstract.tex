@@ -1,15 +1,15 @@
 \begin{abstract}
 Multi-person event recognition is a challenging task,
-since many people are active in the scene but only a small subset contribute
-to the actual event. In this paper, we propose a model which learns to detect events
-in such videos while automatically "attending" to the people responsible
-for the events, without being explicitly told who/ where those people are
+often with many people active in the scene but only a small subset contributing
+to an actual event. In this paper, we propose a model which learns to detect events
+in such videos while automatically ``attending'' to the people responsible
+for the events, without being explicitly told who or where those people are
 during training and testing.  In
 particular, we detect people in videos and learn time-varying attention
 weights to combine their features at each time-instant.  The attended features
 are then classified with a Long Short-Term Memory (LSTM) model. 
 Since most video datasets with multiple people are restricted to a small
-number of videos, we also collected a new basketball dataset comprised of 257 basketball games with
+number of videos, we also collected a new basketball dataset comprising 257 basketball games with
 14K event annotations corresponding to 11 event classes.  Our model outperforms
 state-of-the-art methods for both event classification  and  detection on this
 new dataset. Additionally, we show that the attention mechanism is able to localize the

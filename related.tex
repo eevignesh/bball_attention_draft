@@ -25,7 +25,7 @@ at times better than these features for various video tasks.  Other works like
 features for better performance. Recent works using Recurrent Neural Networks (RNN) have achieved
 state-of-the-art results for both event recognition and caption-generation
 tasks \cite{Donahue_arxiv14,Ng_arxiv15,Srivastava_2015,Yao_arxiv15}.
-We follow this line of work with addition of attention mechanism
+We follow this line of work with the addition of an attention mechanism
 to attend to the event participants.
 
 Another related line of work jointly identifies the region of interest in a video
@@ -51,13 +51,13 @@ as parades have been presented in
 \cite{Vaswani_CVPR03,Intille_CVIU01,Moore_AAAI02,Khan_ACM05}.  They utilize the
 structured layout of participants to identify group events. More
 recently, \cite{Lan_PAMI12,Choi_ICCV09,Khodabandeh_arxiv15} use context as a
-cue for recognizing interaction based group activities.  While the models
+cue for recognizing interaction-based group activities.  While the \Jon{grammar} models
 multi-person events, these methods are restricted to smaller
 datasets such as UT-Interaction\cite{Ryoo_10}, Collective activity
 \cite{Choi_ICCV09} and Nursing home\cite{Lan_PAMI12}.
 
 \noindent \textbf{Attention models}
-Itti et al. \cite{Itti_PAMI98} explored the idea of saliency based attention in
+Itti et al. \cite{Itti_PAMI98} explored the idea of saliency-based attention in
 images, with other works like \cite{Shapovalova_NIPS13} using eye-gaze data as
 a means for learning attention.  Mnih et al. \cite{Mnih_NIPS14} attend to
 regions of varying resolutions in an image through a RNN framework.  Along
@@ -65,13 +65,13 @@ similar lines, attention has been used for image classification
 \cite{Cao_ICCV15,Gregor_arxiv15,Xiao_arxiv14} and detection
 \cite{Ba_arxiv14,Caicedo_ICCV15,Yoo_arxiv15} as well.
 
-Bahdnau et al. \cite{Bahdnau_arxiv14} showed that attention based RNN models
+Bahdanau et al. \cite{Bahdnau_arxiv14} showed that attention-based RNN models
 can effectively align input words to output words for machine translation.
 Following this, Xu et al. \cite{Xu_arxiv15} and Yao et al. \cite{Yao_arxiv15}
 used attention for image-captioning and video-captioning respectively.
 \eat{Following this work, attention was used for aligning regions in an image to
 output words for image-captioning \cite{Xu_arxiv15} and frames in a video with
-output words for video-captioning \cite{Yao_arxiv15}.}In all these methods,
+output words for video-captioning \cite{Yao_arxiv15}.} In all these methods,
 attention aligns a sequence of input features with words of an output sentence.
 However, in our work we use attention to identify the most relevant person to
 the overall event during different phases of the event.\eat{We also provide a
@@ -79,14 +79,14 @@ better BLSTM based representation for the attended people as
 discussed in Section~\ref{sec:methods}.}
 
 \noindent \textbf{Action recognition datasets}
-Action recognition in videos has eveolved with the introduction of more
+Action recognition in videos has evolved with the introduction of more
 sophisticated datasets starting from smaller KTH \cite{KTH}, HMDB \cite{HMDB}
 to larger , UCF101 \cite{UCF101}, TRECVID-MED \cite{MED11} and Sports-1M
 \cite{Karpathy_CVPR14} datasets.  More recently, THUMOS \cite{THUMOS} and
 ActivityNet \cite{ActivityNet} also provide a detection setting with temporal
 annotations for actions in untrimmed videos.  There are also fine-grained
 datasets in specific domains such as MPII cooking \cite{Finegrained_cooking}
-and breakfast \cite{Breakfast}.  However, most of these dataset focus on
+and breakfast \cite{Breakfast}.  However, most of these datasets focus on
 single-person activities with hardly any need for recognizing the people
 responsible for the event. On the other hand, publicly available multi-person
 activity datasets like \cite{Ryoo_10,Choi_ICCV09,VIRAT} are restricted to a very small

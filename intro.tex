@@ -9,7 +9,7 @@ event recognition in videos with multiple people. In our work, we present a new
 model and dataset for this specific setting.
 
 \begin{figure}[ht!]
-\begin{center}
+\begin{center}w
   \includegraphics[width=3.2 in]{images/pull_figure_v3_cropped.pdf}
 \end{center}
 \caption{Looking at the wrong people in a multi-person event can be very uninformative
@@ -23,20 +23,21 @@ to recognize the key players for event recognition.}
 
 Videos captured in sports arenas, market places or other outdoor areas
 typically contain multiple people interacting with each other.
-Typically most people are doing ``something'', but not all of them are involved in the main event.
+Typically, most people are doing ``something'', but not all of them are involved in the main event.
 The main event is dominated by a smaller subset. For instance, a ``shot" in a game
 \eat{or ``shop-lifting" in a market} is determined by one or two people.
-Apart from recognizing the event it is also important
+In addition to recognizing the event, it is also important
 to isolate these key actors. This is a significant challenge which
 differentiates multi-person videos from single-person videos.
 
-Identifying the people responsible for the event is an interesting task in its
-own right.  It is also desirable to learn a model which does not require
-annotations for identifying these people during training. This can
+Identifying the people responsible for an event is thus an interesting task in its
+own right.  However acquiring such annotations is expensive and it is therefore
+desirable to use models that do not require
+annotations for identifying these key actors during training. This can
 also be viewed as a problem of weakly supervised key person identification. In
 this paper, we propose a method  to classify events by using a model that is
-able to ``attend'' to this subset key people.  We  do this without ever
-explicitly telling the model who or where the key people are.
+able to ``attend'' to this subset of key actors.  We  do this without ever
+explicitly telling the model who or where the key actors are.
 
 Recently, several papers have proposed to use ``attention" models for aligning
 elements from a fixed input to a fixed output.  For example,
@@ -54,8 +55,9 @@ relevant to the action being performed; this attention mask can change over
 time. Thus we are combining spatial and temporal attention.  Note that while
 the person detections vary from one frame to another, they can be associated
 across frames through tracking. We provide an RNN based representation for the
-tracks and the attention model is tasked with selecting the most relevant
-track in each frame. We show that this results in improved event recognition
+tracks, and the attention model is tasked with selecting the most relevant
+track in each frame. In addition to being able to isolate the key actors,
+we show that our attention model results in improved event recognition
 performance.
 
 In order to evaluate our method, we need a large number of videos illustrating
@@ -69,7 +71,7 @@ long in length.  This dataset is comparable to the THUMOS \cite{THUMOS}
 detection dataset in terms of number of annotations, but contains longer videos
 in a multi-person setting.
 
-In summary, the contributions of our are paper are as follows.  First, we
+In summary, the contributions of our paper are as follows.  First, we
 introduce a new  large-scale basketball event dataset with 14K dense temporal
 annotations for long video sequences.  Second, we show that our method
 outperforms state-of-the-art methods for the standard tasks of classifying
