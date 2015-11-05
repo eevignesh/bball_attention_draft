@@ -8,7 +8,8 @@ performed by a small subset of people at a given time.  For instance, a
 pass the ball and the player stealing from him.  To understand such an event,
 it is sufficient to observe only the players participating in the event.
 
-This motivates us to build a model which can reason about an event by focusing
+This motivates us to build a model (overview in Fig.~\ref{fig:model})
+which can reason about an event by focusing
 on specific people during the different phases of the event.
 In this section, we describe our unified model for classifying events
 and simultaneously identifying the key players.
@@ -17,9 +18,13 @@ and simultaneously identifying the key players.
 \begin{center}
     \includegraphics[width=3 in]{images/system_figure_1_cropped_v2.pdf}
 \end{center}
-   \caption{Our attention model where each player track is represented by the
-     corresponding BLSTM. The variables in the model are explained in the
-     methods section.  BLSTM stands for ``bidirectional long short term memory''. 
+   \caption{Our model, where each player track is first processed by the
+     corresponding BLSTM network (shown in different colors). The BLSTM
+     hidden-states are then used by an attention model to identify the ``key"
+     player at each instant.  The thickness of the BLSTM boxes shows the
+     attention weights, and the attended person can change with time.  The
+     variables in the model are explained in the methods section.  BLSTM stands
+     for ``bidirectional long short term memory''. 
      \Jon{add text labels to figure to denote ``player tracks'' and ``event state''}
 }
 \label{fig:model}
@@ -34,7 +39,7 @@ features for each person in the frame. In particular, we compute a feature
 vector $p_{ti}$ which contains both appearance and spatial information for the
 $i$'th player bounding box in frame $t$.
 Similar to the RCNN object
-detector\cite{} \Jon{cite}, the appearance features were extracted by feeding the cropped
+detector\cite{Girshick_CVPR14}, the appearance features were extracted by feeding the cropped
 and resized player region from the frame through the Inception7 network and
 spatially pooling the response from a lower layer. The spatial feature
 corresponds to a $32\times 32$ spatial histogram, combined with a spatial pyramid, to
@@ -51,7 +56,8 @@ effect of the way we construct our model, we will also be able to identify the
 key player in each frame.
 
 First we compute a global context feature for each frame, $h_t^f$, derived from
-a bidirectional LSTM applied to the frame-level feature as shown in Fig.~\ref{fig:system_fig}. \Jon{figure}
+a bidirectional LSTM applied to the frame-level feature as shown 
+by the blue boxes in Fig.~\ref{fig:model}.
 This is a concatenation of the hidden states from the forward and reverse LSTM
 components of a BLSTM and can be compactly represented as:
 \[
@@ -77,7 +83,7 @@ and is $-1$ otherwise, and the weight vector corresponding to
 class $k$ is denoted by $w_k$.
 
 \subsection{Attention models}
-Unlike past attention models \cite{},\Jon{cite} we need to attend to a different set of
+Unlike past attention models \cite{Bahdnau_arxiv14,Xu_arxiv15,Yao_arxiv15} we need to attend to a different set of
 features at each time-step. There are two key issues to address in this
 setting.
 
@@ -133,11 +139,12 @@ tracking-free model (discussed next). However, it could result in slightly worse
 identification due to tracking errors.
 
 \noindent \textbf{Attention model without tracking.}
-Here, we treat the detections in each frame to be independent from other
-frames.  This allows the model to be more flexible in switching attention
-between players as the event progresses.  As we later observe empirically, this
-leads to better interpretability and the model does not suffer from
-tracking errors.
+Often, tracking people in a crowded scene can be very difficult due to
+occlusions and fast movements. In such settings, it is beneficial to have a
+tracking-free model.  As an added benefit, this could allow the model to be
+more flexible in switching attention between players as the event progresses.
+Motivated by this, we present a model where the detections in each frame are
+considered to be independent from other frames. 
 
 We  compute the (no track) attention based player feature as shown below:
 \begin{eqnarray} 

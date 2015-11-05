@@ -68,7 +68,7 @@ We split each of these videos into 4 second clips (using the
 annotation boundaries), and subsampled these to 6fps.
 We filter out clips which are not profile shots (such as those shown in
 Figure~\ref{fig:model}) using a separately trained classifier; this excludes close-up shots of players, animations, as
-well as crowd shots. \Jon{Carolyn: this excludes instant-replays too}
+well as shots of the viewers and instant replays.
 This resulted in a total of $11436$ training, $856$ validation
 and $2256$ test clips, each of which has one of 11 labels.
 Note that this is comparable in size to the THUMOS'15 detection
@@ -97,4 +97,5 @@ this resulted in person detections as listed in Tab.~\ref{tab:data_dist}.
 The multibox model achieves an average overlap of $0.7$ at a recall of $0.8$
 with ground-truth bounding boxes in the validation videos.
 These detected player bounding boxes from the
-multi-box model will also be made available with the dataset. \Jon{multibox, multi-box, Multibox, Multi-box}
+multibox model will also be made available with the dataset. 
+%\Jon{multibox, multi-box, Multibox, Multi-box}

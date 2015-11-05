@@ -92,7 +92,14 @@ than uniform averaging, with the tracking based version of attention
 slightly better than the track-free version.
 Note that the performance is much poorer (for all methods) for classes
 such as ``slam dunk fail'' for which we have very little data.
+Also, a standard weakly-supervised approach such as MIL seems to be
+less effective than the attention based model.
 
+Interestingly, player-attention boosts the performance of shot-based events like
+``free-throw", ``layups" and ``3-pointers" where attending to
+the shot making person or defenders can be useful. On the other hand, ``steal" which
+is the only event without an attempted shot is easy to distniguish
+from the others and does not benefit much from attention.
 
 \subsection{Event detection}
 
@@ -131,14 +138,16 @@ Mean             & 0.246  & 0.273 &  & 0.400 & 0.408 & 0.414 & 0.426 & \textbf{0
   \label{tab:detection_res}
 \end{table*}
 
- The detection results
-are presented in Tab.~\ref{tab:detection_res}.
-We see that, as before, the attention models beat previous state of
-the art methods.
-Not surprisingly, all methods are slightly worse at temporal
-localization
-than for classifying
-isolated clips.
+The detection results are presented in Tab.~\ref{tab:detection_res}.  We see
+that, as before, the attention models beat previous state of the art methods.
+Not surprisingly, all methods are slightly worse at temporal localization than
+for classifying isolated clips.  We also note a significant
+difference in classification and detection performance for ``steal" in all
+methods.  This can be explained by the large number of negative instances
+introduced in the detection setting. These negatives often correspond to
+players passing the ball to each other. The ``steal" event is quite similar to
+a ``pass" except that the ball is passed to a player of the opposing team. This
+makes the ``steal" detection task considerably more challenging.
 
 \subsection{Analyzing attention}
 
@@ -164,11 +173,10 @@ the ball is highlighted by attention.}
 \begin{center}
    \includegraphics[width=1.0\linewidth]{images/visual_examples_v2.pdf}
 \end{center}
-   \caption{Visualization of our attention scores at the beginning of different events
-     for the tracking free model.
-Each row of the event corresponds to a different video.
-The player being attended is highlighted in blue.
-The position of the ball is highlighted in yellow.}
+   \caption{We highlight (in cyan) the ``attended" player at the begining of different events.
+     The position of the ball in each frame is shown in yellow.
+   Each column shows a different event. In all these videos, the model attends
+ to the person making the shot at the begining of the event.}
 \label{fig:visual_attention}
 \end{figure*}
 % ---------------------------------------------------------------------------------
@@ -181,12 +189,13 @@ The position of the ball is highlighted in yellow.}
 %  \includegraphics[width=7 in]{images/attention_heatmap_full.pdf}
   \includegraphics[width=7in]{images/heatmap_figure_v2_cropped.pdf}
 \end{center}
-   \caption{We show the distribution of the attention over the basketball court
-     for different events. We used an affine transform to transform the
-     attended player's position to a canonical frame for visualization.
-     Interestingly, the attended court positions are the typical spots from
-     which a player would make a shot for the corresponding event.
-   }
+   \caption{We visualize the distribution of attention over different positions of
+   a basketball court as the event progresses. This is shown for 3 different events.
+   These heatmaps were obtained by fist transforming all videos
+ to a cannonical view of the court (shown in the background of the heatmaps). The top row shows
+ the sample frames which contributed to the ``free-throw" success heatmaps. It is interesting
+ to note that the model focuses on the potential location of the shooter at the begning of an
+ event and later the attention disperses to other locations.}
 \label{fig:att_heatmap}
 \end{figure*}
 % ---------------------------------------------------------------------------------
@@ -257,10 +266,12 @@ throughout the entire event unlike the shooter.
 \begin{center}
    \includegraphics[width=1.0\linewidth]{images/track_spec_output.pdf}
 \end{center}
-   \caption{Visualization of attention scores at the beginning of free-throw success
-     for the attention model with tracks. In this setting, the model consistently
-     attends to the defender at a particular spot as seen from the heatmap
-     showing the distribution of the attended player's position.}
+   \caption{Here, we visualize the distribution of attention for our model with tracking.
+     at the begining of the ``free-throw success" event. Interesting, unlike Fig.~\ref{fig:att_heatmap},
+     the attention is concentrated at a particular defender position. This defence formation
+     is very specific to free-throw events. While the model does not
+     choose the shooter in this event, it still consistently attends to an informative
+   player.}
 \label{fig:visual_attention_trackspec}
 \end{figure}
 % ---------------------------------------------------------------------------------
