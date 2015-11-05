@@ -7,7 +7,7 @@ for the events, without being explicitly told who or where those people are
 during training and testing.  In
 particular, we detect people in videos and learn time-varying attention
 weights to combine their features at each time-instant.  The attended features
-are then classified with a Long Short-Term Memory (LSTM) model. 
+are then combined using a recurrent neural network (RNN).
 Since most video datasets with multiple people are restricted to a small
 number of videos, we also collected a new basketball dataset comprising 257 basketball games with
 14K event annotations corresponding to 11 event classes.  Our model outperforms
