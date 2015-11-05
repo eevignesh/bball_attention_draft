@@ -36,9 +36,9 @@ attention.
 \subsection{Implementation details}
 
 We used a hidden state dimension of $256$ for all the LSTM and BLSTM RNNs, an
-embedding layer with ReLU non-linearity and $256$ dimension for embedding the
+embedding layer with ReLU non-linearity and $256$ dimensions for embedding the
 player features and frame features before feeding to the RNNs.  We used $32
-\times 32$ bins with spatial pyramid pooling for the player appearance feature.
+\times 32$ bins with spatial pyramid pooling for the player location feature.
 All the event videos clips were four seconds long and subsampled to 6fps.  The
 $\tau$ value was set to $0.25$ for the attention softmax weighting. We used a
 batch size of $128$, learning rate of $0.005$ which was reduced by a factor of
@@ -65,12 +65,15 @@ below:
   \item \emph{C3D \cite{Tran_arxiv14}} We use the publicly available pre-trained model for feature extraction
   with an SVM classifier.
 
-  \item \emph{LRCN \cite{Donahue_arxiv14}} This is a baseline model where we use a simple BLSTM on frame-level features similar
-  to LRCN. The only difference is the use of BLSTM in place of LSTM. We found this to improve
-  performance.
+  \item \emph{LRCN \cite{Donahue_arxiv14}} We use a
+BLSTM on frame-level features similar  to LRCN.
+%The only difference is the use of BLSTM in place of LSTM. We found this to improve
+ % performance.
 
-  \item \emph{MIL \cite{Andrews_NIPS02}} Since each frame can be seen as a bag of player features, we used the
-  classical MIL model. 
+  \item \emph{MIL \cite{Andrews_NIPS02}} 
+We use a multi-instance learning method to learn the bag (frame) label from
+the set of player features.
+
 
 \item \emph{Only player} We only use our player features from Sec.~\ref{sec:feature_extraction} in our model
   without frame-level features.
@@ -86,20 +89,29 @@ using  attention.
 The mean average precision (mAP)
 are shown in Tab.~\ref{tab:class_res}. We see that the method that
 uses both global information and local player information outperforms
-only using player information. We also show that combining the player
+only using local player information (``Only player'')
+and only using global information (``LRCN'').
+We also show that combining the player
 information using a weighted sum (i.e., an attention model) is better
-than uniform averaging, with the tracking based version of attention
+than uniform averaging (``Avg. player''), with the tracking based version of attention
 slightly better than the track-free version.
-Note that the performance is much poorer (for all methods) for classes
-such as ``slam dunk fail'' for which we have very little data.
 Also, a standard weakly-supervised approach such as MIL seems to be
-less effective than the attention based model.
+less effective than any of our modeling variants.
 
-Interestingly, player-attention boosts the performance of shot-based events like
-``free-throw", ``layups" and ``3-pointers" where attending to
-the shot making person or defenders can be useful. On the other hand, ``steal" which
+The performance varies by class.
+In particular, performance is much poorer (for all methods) for classes
+such as ``slam dunk fail'' for which we have very little data.
+However, performance is better for shot-based events like
+``free-throw'', ``layups'' and ``3-pointers''where attending to
+the shot making person or defenders can be useful. 
+\eat{
+On the other hand,
+``steal'' does not benefit from attention, since it is easy to
+distinguish this class from others.
+which
 is the only event without an attempted shot is easy to distniguish
 from the others and does not benefit much from attention.
+}
 
 \subsection{Event detection}
 
@@ -118,7 +130,7 @@ we were unable to train the MIL model due to computational limitations.
 \small
  \begin{tabular}{|l|c|c|c|c|c|c|c|c|}
   \hline
-Event & IDT\cite{Wang_CVPR11} & IDT player\cite{Wang_CVPR11} & C3D \cite{Tran_arxiv14} & LRCN \cite{Donahue_arxiv14} & Only player & Avg. player & Our no track & Our track \\ \hline \hline
+Event & IDT\cite{Wang_CVPR11} & IDT player\cite{Wang_CVPR11} & C3D \cite{Tran_arxiv14} & LRCN \cite{Donahue_arxiv14} & Only player & Avg. player & Attn no track & Attn track \\ \hline \hline
 3-point succ.    & 0.194  & 0.203 &  & 0.230 & 0.251 & \textbf{0.268} & 0.263 & 0.239 \\
 3-point fail.    & 0.393  & 0.376 &  & 0.505 & 0.526 & 0.521 & 0.556 & \textbf{0.600} \\
 free-throw succ. & 0.585  & 0.621 &  & 0.741 & 0.777 & \textbf{0.811} & 0.788 & 0.810 \\
@@ -242,6 +254,7 @@ including the identity and position of the shooter as well.
 
 In addition to the above quantitative evaluation, we wanted to
 visualize the attention masks visually.
+Figure~\ref{fig:visual_attention} shows sample sample videos.
 In order to make results comparable across frames, 
 we annotated 5 points on the court and
 aligned all the attended boxes for an event to one canonical image. 

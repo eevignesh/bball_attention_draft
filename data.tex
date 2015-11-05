@@ -29,6 +29,7 @@ multi-person event recognition.}
 \section{NCAA Basketball Dataset}
 \label{sec:data}
 
+\eat{
 Most recent activity detection datasets like THUMOS \cite{THUMOS},
 ActivityNet \cite{ActivityNet}, UCF101 
 \cite{UCF101}, finegrained cooking \cite{Finegrained_cooking},
@@ -38,7 +39,9 @@ people in each frame, only a small number of whom are involved with
 the  activity. In such a setting, we are interested in recognizing the event
 as well as the key participants. A natural choice for such data is
 multi-player team sports.
+}
 
+A natural choice for collecting multi-person action videos is team sports.
 In this paper, we focus on basketball games, although our techniques
 are general purpose.
 In particular,  we use a subset of the $296$ NCAA games available from 
@@ -60,42 +63,43 @@ the ball leaves the shooters hands and lands somewhere else, such as
 in the basket).
 To determine the starting time, we assumed that each event was 4
 seconds long, since it is hard to get raters to agree on when an event
-started. \Jon{Carolyn: why 4?}
+started. 
+This give us enough temporal context to classify each event, while
+still being fairly well localized in time.
+
 
 The videos were randomly split into $212$ training, $12$ validation and $33$
 test videos. 
 We split each of these videos into 4 second clips (using the
 annotation boundaries), and subsampled these to 6fps.
 We filter out clips which are not profile shots (such as those shown in
-Figure~\ref{fig:model}) using a separately trained classifier; this excludes close-up shots of players, animations, as
+Figure~\ref{fig:model}) using a separately trained classifier; this excludes close-up shots of players,  as
 well as shots of the viewers and instant replays.
 This resulted in a total of $11436$ training, $856$ validation
 and $2256$ test clips, each of which has one of 11 labels.
 Note that this is comparable in size to the THUMOS'15 detection
 challenge (150 trimmed training instances for each of the $20$ classes and $6553$
 untrimmed validation instances). The distribution of annotations across all the
-different events is visualized in Tab.~\ref{tab:data_dist}, with sample videos
-for a few event classes. 
+different events is visualized in Tab.~\ref{tab:data_dist}.
+
 
 In addition to annotating the event label and start/end time,
 we collected AMT annotations on $850$ video clips in the test
 set, where the annotators were asked to mark the position of the ball
 on the frame where the shooter attempts a shot.
-From this, we can infer which player is shooting the ball.
-
 To the best of our
 knowledge, this is the first dataset with dense temporal annotations for
 such long video sequences.
 
-\noindent \textbf{Player detections.}
+%\noindent \textbf{Player detections.}
 We also used AMT to annotate the bounding boxes of all the players in a
 subset of 9000 frames from the training videos.
 We then trained a Multibox detector \cite{Szegedy_arxiv14}
 with these annotations, and ran the trained detector on all the videos in our dataset.
 We retained all detections above a confidence of 0.5 per frame;
-this resulted in person detections as listed in Tab.~\ref{tab:data_dist}.
+this resulted in 6--8 person detections per clip, as listed in Tab.~\ref{tab:data_dist}.
 The multibox model achieves an average overlap of $0.7$ at a recall of $0.8$
 with ground-truth bounding boxes in the validation videos.
-These detected player bounding boxes from the
-multibox model will also be made available with the dataset. 
-%\Jon{multibox, multi-box, Multibox, Multi-box}
+
+We plan to release our annotated data, including time stamps, ball
+location, and player bounding boxes, upon acceptance of the paper.

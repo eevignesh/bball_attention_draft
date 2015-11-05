@@ -32,6 +32,7 @@ and simultaneously identifying the key players.
 
 \subsection{Feature extraction}
 \label{sec:feature_extraction}
+\Kevin{how big is this feature vector?}
 Each video-frame is represented by a feature vector $f_t$, which is the
 activation of the last fully connected layer of the Inception7 network
 \cite{Ioffe_arxiv15,Inception7}.  In addition, we compute spatially localized
@@ -44,13 +45,13 @@ and resized player region from the frame through the Inception7 network and
 spatially pooling the response from a lower layer. The spatial feature
 corresponds to a $32\times 32$ spatial histogram, combined with a spatial pyramid, to
 indicate the bounding box location at multiple scales.
-While we have only used spatial CNN representations in our
+While we have only used static CNN representations in our
 work, these features can also be easily extended with flow information as
 suggested in \cite{Simonyan_NIPS14}.
 
 \subsection{Event classification}
 
-Given $f_t$ and $p_{ti}$ for each frame $t$ from $1$ to $T$, our goal
+Given $f_t$ and $p_{ti}$ for each frame $t$, our goal
 is to train the model to classify the clip into one of 11 categories. As a side
 effect of the way we construct our model, we will also be able to identify the
 key player in each frame.
@@ -62,8 +63,8 @@ This is a concatenation of the hidden states from the forward and reverse LSTM
 components of a BLSTM and can be compactly represented as:
 \[
   h_t^f = \mbox{BLSTM}_{frame}(h_{t-1}^f, h_{t+1}^f, f_t).
-\]Please refer to Graves et al. \cite{Graves_2013} or the supp. material
-for the full equations.
+\]Please refer to Graves et al. \cite{Graves_2013}.
+% or the supp. material for the full equations.
 
 Next we use  a unidirectional LSTM to represent the state of the
 event at time $t$:
@@ -73,14 +74,16 @@ h_t^e = \mbox{LSTM}(h_{t-1}^e, h_t^f, a_t),
 \end{equation}
 where $a_t$ is a feature vector derived from the players, as we
 describe below.
-From this, we can predict the class label for the clip using $w_k^T
-h_t^e$. We measure the squared-hinge loss as follows:
+From this, we can predict the class label for the clip using 
+$w_k^\intercal h_t^e$,
+where the weight vector corresponding to
+class $k$ is denoted by $w_k$.
+ We measure the squared-hinge loss as follows:
 \begin{equation}
-  L =   \frac{1}{2} \sum_{t=1}^T \sum_{k = 1}^K \max (0, 1 - y_k w_k^T h^e_t)^2,
+  L =   \frac{1}{2} \sum_{t=1}^T \sum_{k = 1}^K \max (0, 1 - y_k w_k^\intercal h^e_t)^2,
 \end{equation} 
 where $y_k$ is $1$ if the video belongs to class $k$,
-and is $-1$ otherwise, and the weight vector corresponding to
-class $k$ is denoted by $w_k$.
+and is $-1$ otherwise.
 
 \subsection{Attention models}
 Unlike past attention models \cite{Bahdnau_arxiv14,Xu_arxiv15,Yao_arxiv15} we need to attend to a different set of
@@ -99,7 +102,8 @@ the event the success or failure of the shot can be judged by observing the
 person in possession of the ball.
 
 With these issues in mind, we first present our model which uses player tracks
-and learns a BLSTM based representation for each player track. Next, we also
+and learns a BLSTM based representation for each player track. We then
+also
 present a simple tracking-free baseline model.
 
 \noindent \textbf{Attention model with tracking.}
@@ -131,12 +135,14 @@ at that time-step:
 multi layer perceptron, similar to \cite{Bahdnau_arxiv14}. $\tau$ is the softmax temperature parameter.
 This attended player representation is input to the
 unidirectional event recognition LSTM in Eq.~\ref{eq:event_lstm}.
-
 This model is illustrated in Figure~\ref{fig:model}.
+
+\eat{
 Later, we show that this method achieves better
 performance at event classification and detection compared to a
 tracking-free model (discussed next). However, it could result in slightly worse ``key player"
 identification due to tracking errors.
+}
 
 \noindent \textbf{Attention model without tracking.}
 Often, tracking people in a crowded scene can be very difficult due to
