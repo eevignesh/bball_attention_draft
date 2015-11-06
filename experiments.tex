@@ -189,7 +189,7 @@ the ball is highlighted by attention.}
 % -------- Heat Map for youtube videos
 \begin{figure*}[t!]
 \begin{center}
-  \vspace{-4mm}
+  \vspace{-7mm}
 %  \includegraphics[width=7 in]{images/attention_heatmap_full.pdf}
   \includegraphics[width=0.9\linewidth]{images/heatmap_figure_v2_cropped.pdf}
 \end{center}
@@ -199,7 +199,7 @@ the ball is highlighted by attention.}
    These heatmaps were obtained by first transforming all videos
  to a canonical view of the court (shown in the background of each heatmap). The top row shows
  the sample frames which contributed to the ``free-throw" success heatmaps. It is interesting
- to note that the model focuses on the potential location of the shooter at the beginning of an
+ to note that the model focuses on the location of the shooter at the beginning of an
  event and later the attention disperses to other locations.}
   \vspace{-4mm}
 \label{fig:att_heatmap}
@@ -214,7 +214,6 @@ were capable of classifying the ``shooter" correctly in these frames.
 
 \begin{table}[ht!]
 \begin{center}
-  \vspace{-4mm}
 \small
  \begin{tabular}{|l|c|c|c|}
   \hline
@@ -247,27 +246,6 @@ is capable of localizing the player making the shot. This could be a useful cue
 for providing more detailed event descriptions including the identity and
 position of the shooter as well.
 
-In addition to the above quantitative evaluation, we wanted to visualize the
-attention masks visually.  Figure~\ref{fig:visual_attention} shows 
-sample videos.  In order to make results comparable across frames, we annotated
-5 points on the court and aligned all the attended boxes for an event to one
-canonical image.  Fig.~\ref{fig:att_heatmap} shows a heatmap  visualizing the
-spatial distributions of the attended players with respect to the court. It is
-interesting to note that our model consistently focuses under the basket for a
-layup, at the free-throw line for free-throws and outside the 3-point ring for
-3-pointers.
-
-Another interesting observation
-%from Tab.~\ref{tab:attention_res}
-is that the attention scores for the tracking based model are less selective in
-focusing on the shooter.  We observed that the tracking model is often
-reluctant to switch attention between frames and focuses on a single
-player throughout the event. This biases the model towards players who are
-present throughout the event. For instance, in free-throws
-(Fig.~\ref{fig:visual_attention_trackspec}) we see that the model always
-attends to the defender at a specific position, who is visible throughout the
-entire event unlike the shooter.
-
 % -------- Heat Map for youtube videos
 \begin{figure}[ht!]
 \begin{center}
@@ -286,4 +264,25 @@ entire event unlike the shooter.
 \end{figure}
 % ---------------------------------------------------------------------------------
 
+In addition to the above quantitative evaluation, we wanted to visualize the
+attention masks visually.  Figure~\ref{fig:visual_attention} shows 
+sample videos.  In order to make results comparable across frames, we annotated
+5 points on the court and aligned all the attended boxes for an event to one
+canonical image.  Fig.~\ref{fig:att_heatmap} shows a heatmap  visualizing the
+spatial distributions of the attended players with respect to the court. It is
+interesting to note that our model consistently focuses under the basket for a
+layup, at the free-throw line for free-throws and outside the 3-point ring for
+3-pointers.
 
+Another interesting observation
+%from Tab.~\ref{tab:attention_res}
+is that the attention scores for the tracking based model are less selective in
+focusing on the shooter.  We observed that the tracking model is often
+reluctant to switch attention between frames and focuses on a single
+player throughout the event. This biases the model towards players who are
+present throughout the video. For instance, in free-throws
+(Fig.~\ref{fig:visual_attention_trackspec}) the model always
+attends to the defender at a specific position, who is visible throughout the
+entire event unlike the shooter.
+
+\vspace{-2mm}

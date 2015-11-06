@@ -1,7 +1,7 @@
 \begin{figure*}[ht!]
   \includegraphics[width=6.5 in]{images/dataset_figure_cropped.pdf}
   \caption{We densely annotate every instance of 11 different basketball events in long basketball
-  video. As shown here, we collected the event time-stamp along with the event label through an
+  videos. As shown here, we collected both event time-stamps and an event labels through an
 AMT task.}
 \end{figure*}
 
@@ -13,7 +13,7 @@ AMT task.}
 Traditionally, well engineered features have proved quite effective for video
 classification and retrieval tasks
 \cite{Dalal_ECCV06,Jain_CVPR13,Jiang_ECCV12,Laptev_CVPR08,
-Niebels_ECCV10,Oh_MVA14,Oneata_ICCV13,Peng_ECCV14,Sadanand_CVPR12,Schuldt_ICPR04,Wang_BMVC09,Wang_CVPR11}.
+Niebels_ECCV10,Oh_MVA14,Laxton_CVPR07,Oneata_ICCV13,Peng_ECCV14,Sadanand_CVPR12,Schuldt_ICPR04,Wang_BMVC09,Wang_CVPR11}.
 The improved dense trajectory (IDT) features \cite{Wang_CVPR11} achieve
 competitive results on standard video datasets.  In the last few years,
 end-to-end trained deep network models
@@ -28,7 +28,7 @@ to attend to the event participants.
 
 Another related line of work jointly identifies the region of interest in a video
 while recognizing the action.
-Gkioxari et al.  \cite{Gkioxari_arxiv14} and Raptis et al.  \cite{Raptis_CVPR12}
+Gkioxari et al.  \cite{Gkioxari_arxiv14} and Raptis et al. \cite{Raptis_CVPR12}
 automatically localize a spatio-temporal tube in a video.
 Jain et al. \cite{Jain_CVPR14} merge super-voxels for action localization.
 While these methods perform weakly-supervised action localization, they target
@@ -78,7 +78,7 @@ discussed in Section~\ref{sec:methods}.}
 
 \noindent \textbf{Action recognition datasets}
 Action recognition in videos has evolved with the introduction of more
-sophisticated datasets starting from smaller KTH \cite{KTH}, HMDB \cite{HMDB}
+sophisticated datasets starting from smaller KTH \cite{Schuldt_ICPR04}, HMDB \cite{HMDB}
 to larger , UCF101 \cite{UCF101}, TRECVID-MED \cite{MED11} and Sports-1M
 \cite{Karpathy_CVPR14} datasets.  More recently, THUMOS \cite{THUMOS} and
 ActivityNet \cite{ActivityNet} also provide a detection setting with temporal
