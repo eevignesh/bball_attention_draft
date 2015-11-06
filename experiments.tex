@@ -66,7 +66,7 @@ player features and frame features before feeding to the RNNs.  We used $32
 \times 32$ bins with spatial pyramid pooling for the player location feature.
 All the event videos clips were four seconds long and subsampled to 6fps.  The
 $\tau$ value was set to $0.25$ for the attention softmax weighting. We used a
-batch size of $128$, learning rate of $0.005$ which was reduced by a factor of
+batch size of $128$, and a learning rate of $0.005$ which was reduced by a factor of
 $0.1$ every $10000$ iterations with RMSProp\cite{RMSProp}. The models were
 trained on a cluster of $20$ GPUs for $100k$ iterations over one day.  The
 hyperparameters were chosen by cross-validating on the validation set.
@@ -88,8 +88,8 @@ against different control settings and baseline models explained below:
   \item \emph{C3D \cite{Tran_arxiv14}} We use the publicly available pre-trained model for feature extraction
   with an SVM classifier.
 
-  \item \emph{LRCN \cite{Donahue_arxiv14}} We use a LRCN model with frame-level features. However, we use
-    a BLSTM in place of a LSTM. We found this to improve performance. Also, we do not back-propagate
+  \item \emph{LRCN \cite{Donahue_arxiv14}} We use an LRCN model with frame-level features. However, we use
+    a BLSTM in place of an LSTM. We found this to improve performance. Also, we do not back-propagate
     into the CNN extracting the frame-level features to be consistent with our model.
 
   \item \emph{MIL \cite{Andrews_NIPS02}} We use a multi-instance learning
@@ -106,7 +106,7 @@ using  attention.
   \item \emph{Attention with track} Our model with tracking (Eq.~\ref{eq:track}).
 \end{itemize}
 
-The mean average precision (mAP) are shown in Tab.~\ref{tab:class_res}. We see
+The mean average precision (mAP) for each setting is shown in Tab.~\ref{tab:class_res}. We see
 that the method that uses both global information and local player information
 outperforms the model only using local player information (``Only player'') and only
 using global information (``LRCN'').  We also show that combining the player
@@ -178,10 +178,10 @@ the ball is highlighted by attention.}
 \begin{center}
    \includegraphics[width=0.90\linewidth]{images/visual_examples_v2.pdf}
 \end{center}
-   \caption{We highlight (in cyan) the ``attended" player at the begining of different events.
+   \caption{We highlight (in cyan) the ``attended" player at the beginning of different events.
      The position of the ball in each frame is shown in yellow.
    Each column shows a different event. In these videos, the model attends
- to the person making the shot at the begining of the event.}
+ to the person making the shot at the beginning of the event.}
 \label{fig:visual_attention}
 \end{figure*}
 % ---------------------------------------------------------------------------------
@@ -196,10 +196,10 @@ the ball is highlighted by attention.}
   \vspace{-4mm}
    \caption{We visualize the distribution of attention over different positions of
    a basketball court as the event progresses. This is shown for 3 different events.
-   These heatmaps were obtained by fist transforming all videos
- to a cannonical view of the court (shown in the background of each heatmap). The top row shows
+   These heatmaps were obtained by first transforming all videos
+ to a canonical view of the court (shown in the background of each heatmap). The top row shows
  the sample frames which contributed to the ``free-throw" success heatmaps. It is interesting
- to note that the model focuses on the potential location of the shooter at the begning of an
+ to note that the model focuses on the potential location of the shooter at the beginning of an
  event and later the attention disperses to other locations.}
   \vspace{-4mm}
 \label{fig:att_heatmap}
@@ -248,7 +248,7 @@ for providing more detailed event descriptions including the identity and
 position of the shooter as well.
 
 In addition to the above quantitative evaluation, we wanted to visualize the
-attention masks visually.  Figure~\ref{fig:visual_attention} shows sample
+attention masks visually.  Figure~\ref{fig:visual_attention} shows 
 sample videos.  In order to make results comparable across frames, we annotated
 5 points on the court and aligned all the attended boxes for an event to one
 canonical image.  Fig.~\ref{fig:att_heatmap} shows a heatmap  visualizing the
@@ -275,12 +275,12 @@ entire event unlike the shooter.
 \end{center}
   \vspace{-4mm}
 \caption{The distribution of attention for our model with tracking,
-     at the begining of ``free-throw success". Unlike
+     at the beginning of ``free-throw success". Unlike
      Fig.~\ref{fig:att_heatmap}, the attention is concentrated at a specific
-     defender's position. Free-throws have a distinctive defence formation, and
+     defender's position. Free-throws have a distinctive defense formation, and
    observing the defenders can be helpful as shown in the sample images in
  the top row.} \eat{While the model does not choose the shooter in this case, it
- consistently attends to another releavant player.}
+ consistently attends to another relevant player.}
   \vspace{-4mm}
 \label{fig:visual_attention_trackspec}
 \end{figure}
