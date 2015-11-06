@@ -1,6 +1,3 @@
-
-\TODO{cite pascal fua's sports papers}
-
 \begin{figure*}[ht!]
   \includegraphics[width=6.5 in]{images/dataset_figure_cropped.pdf}
   \caption{We densely annotate every instance of 11 different basketball events in long basketball
@@ -95,11 +92,12 @@ number of videos.  One of the contributions of our work is a multi-player
 basketball dataset with dense temporal event annotations in long videos.
 
 \noindent \textbf{Person detection and tracking}. There is a very
-large literature on person detection and tracking. Here we just
-mention a few key papers.
+large literature on person detection and tracking.
+There are also specific methods for tracking players in
+sports videos \cite{Shitrit_ICCV11}.
+Here we just mention a few key methods.
 For person detection, we use the CNN-based multibox detector from
-\cite{Szegedy13}.
-For person tracking, we use the KLT tracker from
+\cite{Szegedy13}. For person tracking, we use the KLT tracker from
 \cite{Veenman_PAMI2001}.
 There is also work on player identification (e.g., \cite{Lu2013}), but
-in this work, we do not attempt to distinguish individual players.
+in this work, we do not attempt to distinguish players.
