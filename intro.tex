@@ -2,13 +2,14 @@
 
 Event recognition and detection in videos has hugely benefited from the
 introduction of recent large-scale datasets
-\cite{THUMOS,UCF101,Karpathy_CVPR14,MED11} and models.  However, this is mainly
+\cite{THUMOS,UCF101,Karpathy_CVPR14,MED11,ActivityNet} and models.  However, this is mainly
 confined to the domain of single-person actions where the videos contain one
 actor performing a primary activity.  Another equally important problem is
 event recognition in videos with multiple people. In our work, we present a new
 model and dataset for this specific setting.
 
 \begin{figure}[ht!]
+  \vspace{-4mm}
 \begin{center}
   \includegraphics[width=3.2 in]{images/pull_figure_v3_cropped.pdf}
 \end{center}
@@ -17,14 +18,15 @@ model and dataset for this specific setting.
   people in the \emph{same video}, we can easily identify the event as a ``2-pointer success" based
   on the shooter and the player throwing the ball into play. We use the same intuition
 to recognize the key players for event recognition.}
+\vspace{-4mm}
 \label{fig:pull_figure}
 \end{figure}
 
 Videos captured in sports arenas, market places or other outdoor areas
 typically contain multiple people interacting with each other.
-Typically, most people are doing ``something'', but not all of them are involved in the main event.
+Most people are doing ``something'', but not all of them are involved in the main event.
 The main event is dominated by a smaller subset of people. For instance, a ``shot" in a game
-is determined by one or two people (see Figure~\ref{fig:pull_figures}).
+is determined by one or two people (see Figure~\ref{fig:pull_figure}).
 In addition to recognizing the event, it is also important
 to isolate these key actors. This is a significant challenge which
 differentiates multi-person videos from single-person videos.
@@ -57,15 +59,14 @@ across frames through tracking. We show how to use a recurrent neural
 network (RNN) to represent information from each track;
 the attention model is tasked with selecting the most relevant
 track in each frame. In addition to being able to isolate the key actors,
-we show that our attention model results in improved event recognition
-performance.
+we show that our attention model results in better event recognition.
 
 In order to evaluate our method, we need a large number of videos illustrating
 events involving multiple people. Most prior activity and event
 recognition datasets focus on actions involving just one or two people.
 Multi-person datasets like \cite{Ryoo_ICCV09,VIRAT,Choi_ICCV09} are usually restricted to fewer videos.
-Therefore we decided to collect our own dataset.
-In particular we collect a new dataset of basketball events with time-stamp annotations for
+Therefore we collected our own dataset.
+In particular we propose a new dataset of basketball events with time-stamp annotations for
 all occurrences of $11$ different events across $257$ videos each $1.5$ hours
 long in length.  This dataset is comparable to the THUMOS \cite{THUMOS}
 detection dataset in terms of number of annotations, but contains longer videos

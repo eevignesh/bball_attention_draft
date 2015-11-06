@@ -1,12 +1,13 @@
 \section{Our Method}
 \label{sec:methods}
 
-All events in a team sport are performed in the same scene by the same set
-of players. The only basis for differentiating these events is the action
+All events in a team sport are performed in the same scene by the same set of
+players. The only basis for differentiating these events is the action
 performed by a small subset of people at a given time.  For instance, a
-``steal" event in basketball is completely defined by the action of the player attempting to
-pass the ball and the player stealing from him.  To understand such an event,
-it is sufficient to observe only the players participating in the event.
+``steal" event in basketball is completely defined by the action of the player
+attempting to pass the ball and the player stealing from him.  To understand
+such an event, it is sufficient to observe only the players participating in
+the event.
 
 This motivates us to build a model (overview in Fig.~\ref{fig:model})
 which can reason about an event by focusing
@@ -19,25 +20,25 @@ and simultaneously identifying the key players.
     \includegraphics[width=3 in]{images/system_figure_1_cropped_v2.pdf}
 \end{center}
    \caption{Our model, where each player track is first processed by the
-     corresponding BLSTM network (shown in different colors). The BLSTM
-     hidden-states are then used by an attention model to identify the ``key"
-     player at each instant.  The thickness of the BLSTM boxes shows the
-     attention weights, and the attended person can change with time.  The
-     variables in the model are explained in the methods section.  BLSTM stands
-     for ``bidirectional long short term memory''. 
-     \Jon{add text labels to figure to denote ``player tracks'' and ``event state''}
-}
+     corresponding BLSTM network (shown in different colors).  $Pi$-BLSTM
+     corresponds to the $i$'th player.  The BLSTM hidden-states are then used
+     by an attention model to identify the ``key" player at each instant.  The
+     thickness of the BLSTM boxes shows the attention weights, and the attended
+     person can change with time.  The variables in the model are explained in
+     the methods section.  BLSTM stands for ``bidirectional long short term
+   memory''. }
+     %\Jon{add text labels to
+    %figure to denote ``player tracks'' and ``event state''} }
 \label{fig:model}
 \end{figure}
 
 \subsection{Feature extraction}
 \label{sec:feature_extraction}
-\Kevin{how big is this feature vector?}
-Each video-frame is represented by a feature vector $f_t$, which is the
+Each video-frame is represented by a $1024$ dimensional feature vector $f_t$, which is the
 activation of the last fully connected layer of the Inception7 network
 \cite{Ioffe_arxiv15,Inception7}.  In addition, we compute spatially localized
-features for each person in the frame. In particular, we compute a feature
-vector $p_{ti}$ which contains both appearance and spatial information for the
+features for each person in the frame. In particular, we compute a $2805$ dimensional feature
+vector $p_{ti}$ which contains both appearance ($1365$ dimensional) and spatial information ($1440$ dimensional) for the
 $i$'th player bounding box in frame $t$.
 Similar to the RCNN object
 detector\cite{Girshick_CVPR14}, the appearance features were extracted by feeding the cropped
@@ -109,8 +110,8 @@ present a simple tracking-free baseline model.
 \noindent \textbf{Attention model with tracking.}
 We first associate the detections
 belonging to the same player into tracks using a standard
-tracking method. We use a KLT tracker combined with
-bipartite graph matching \cite{munkres1957algorithms} to perform the data association.
+method. We use a KLT tracker combined with
+bipartite graph matching \cite{Munkres_1957} to perform the data association.
 
 The player tracks can now be used to incorporate context
 from adjacent frames while computing their representation.
@@ -147,7 +148,7 @@ identification due to tracking errors.
 \noindent \textbf{Attention model without tracking.}
 Often, tracking people in a crowded scene can be very difficult due to
 occlusions and fast movements. In such settings, it is beneficial to have a
-tracking-free model.  As an added benefit, this could allow the model to be
+tracking-free model. This could also allow the model to be
 more flexible in switching attention between players as the event progresses.
 Motivated by this, we present a model where the detections in each frame are
 considered to be independent from other frames. 
