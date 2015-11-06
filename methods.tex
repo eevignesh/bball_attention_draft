@@ -17,7 +17,7 @@ and simultaneously identifying the key players.
 
 \begin{figure}[t!]
 \begin{center}
-    \includegraphics[width=3 in]{images/system_figure_1_cropped_v2.pdf}
+    \includegraphics[width=3 in]{images/system_figure_4_cropped.pdf}
 \end{center}
    \caption{Our model, where each player track is first processed by the
      corresponding BLSTM network (shown in different colors).  $Pi$-BLSTM
@@ -62,9 +62,9 @@ a bidirectional LSTM applied to the frame-level feature as shown
 by the blue boxes in Fig.~\ref{fig:model}.
 This is a concatenation of the hidden states from the forward and reverse LSTM
 components of a BLSTM and can be compactly represented as:
-\[
+\begin{equation}
   h_t^f = \mbox{BLSTM}_{frame}(h_{t-1}^f, h_{t+1}^f, f_t).
-\]Please refer to Graves et al. \cite{Graves_2013}.
+\end{equation}Please refer to Graves et al. \cite{Graves_2013}.
 % or the supp. material for the full equations.
 
 Next we use  a unidirectional LSTM to represent the state of the
@@ -120,9 +120,9 @@ representation for each player at a given time-step.
 The latent representation of player $i$ in frame $t$ is
 given by the hidden state
 $h_{ti}^p$ of the BLSTM across the player-track:
-\[
+\begin{equation}
   h_{ti}^p = \mbox{BLSTM}_{track}(h_{t-1,i}^p, h_{t+1,i}^p, p_{ti}).
-\]
+\end{equation}
 
 At every time-step we want the most relevant player at that
 instant to be chosen. We achieve this by computing
